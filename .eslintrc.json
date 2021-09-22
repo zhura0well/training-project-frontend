@@ -29,7 +29,6 @@
             }
         ],
         "no-trailing-spaces": ["error"],
-        "semi": ["error", "never"],
-        "linebreak-style": ["error", "windows"]
+        "semi": ["error", "never"]
     }
 }

@@ -23,8 +23,8 @@ function Router() {
 
   const adminRouts = [
     { path: '/admin', component: <Admin /> },
-    { path: '/admin/all-users', component: <AllUsers />},
-    { path: '/admin/user-info/:id', component: <UserInfo/>}
+    { path: '/admin/all-users', component: <AllUsers /> },
+    { path: '/admin/user-info/:id', component: <UserInfo /> }
   ]
 
   const roles = document.cookie.replace(/(?:(?:^|.*;\s*)roles\s*=\s*([^;]*).*$)|^.*$/, "$1")
