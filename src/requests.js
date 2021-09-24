@@ -1,9 +1,11 @@
+const backendUrl = process.env.REACT_APP_BACKEND_URL
+
 export const getData = async (url) => {
-  const response = await fetch(url)
+  const response = await fetch(backendUrl + url)
   return response.ok ? response.json() : Promise.reject(response)
 }
 export const postData = async (url, data) => {
-  const response = await fetch(url, {
+  const response = await fetch(backendUrl + url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -14,7 +16,7 @@ export const postData = async (url, data) => {
 }
 
 export const patchData = async (url, data) => {
-  const response = await fetch(url, {
+  const response = await fetch(backendUrl + url, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
