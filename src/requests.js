@@ -1,4 +1,4 @@
-const backendUrl = process.env.REACT_APP_BACKEND_URL
+const backendUrl = 'https://shop-training-project-backend.herokuapp.com/'
 
 export const getData = async (url) => {
   const response = await fetch(backendUrl + url)
