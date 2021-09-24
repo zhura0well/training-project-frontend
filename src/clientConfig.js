@@ -3,3 +3,5 @@ export const ROLE = {
   USER: 'USER',
   MODER: 'MODER'
 }
+
+export const backendUrl = 'https://shop-training-project-backend.herokuapp.com'
