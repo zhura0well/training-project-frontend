@@ -13,6 +13,7 @@ import Moder from '../views/moder'
 import UserInfo from '../views/user-info'
 
 function Router() {
+
   const userRouts = [
     { path: '/user', component: <Home /> },
   ]
@@ -27,8 +28,7 @@ function Router() {
     { path: '/admin/user-info/:id', component: <UserInfo /> }
   ]
 
-  const roles = document.cookie.replace(/(?:(?:^|.*;\s*)roles\s*=\s*([^;]*).*$)|^.*$/, "$1")
-  const isAuthorized = document.cookie.replace(/(?:(?:^|.*;\s*)isAuthorized\s*=\s*([^;]*).*$)|^.*$/, "$1")
+  const roles = localStorage.getItem('roles') || ''
 
   return (
     <>
@@ -40,9 +40,9 @@ function Router() {
         <Login isRegistered={false} />
       </Route>
       <Route exact path='/'>
-        {!isAuthorized ?
-          <Redirect push to='/login' />
-          : <Home />}
+        {roles.length > 0 ?
+          <Home />
+          : <Redirect push to='/login' />}
       </Route>
       {
         roles.includes(ROLE.USER) &&

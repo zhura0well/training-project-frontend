@@ -41,8 +41,9 @@ const Login = (props) => {
 
   const login = async () => {
     const url = props.isRegistered ? '/api/login' : '/api/register'
+
     postData(url, { username, password })
-      .then(() => document.cookie = 'isAuthorized=true')
+      .then(response => localStorage.setItem('roles', response.roles))
       .then(() => {
         setUsername('')
         setPassword('')
