@@ -29,11 +29,11 @@ const Header = ({ isAuthorized }) => {
             <NavLink className='link' activeClassName='link-active' exact to='/user'>
               User
             </NavLink>
-            <NavLink className='link' activeClassName='link-active' exact to='/#'>
+            <NavLink className='link' activeClassName='link-active' exact to='/admin'>
               Sth else
             </NavLink>
-            <NavLink className='link' activeClassName='link-active' exact to='/#'>
-              Sth else
+            <NavLink className='link' activeClassName='link-active' exact to='/admin/all-users'>
+              Admin
             </NavLink>
             <NavLink exact to='/login' className='link' activeClassName='link-active'> {!isAuthorized ? 'Login' : 'Logout'}</NavLink>
           </Toolbar>
