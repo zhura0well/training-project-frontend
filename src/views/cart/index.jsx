@@ -3,9 +3,11 @@ import { Container, Typography, Box } from '@material-ui/core'
 import ProductCard from '../../components/product-card'
 import { useSelector } from 'react-redux'
 
-const Home = () => {
+const Cart = () => {
 
-  const items = useSelector(state => state.cart.items)
+  const items = useSelector(state => state.cart.addedItems)
+  const totalPrice = useSelector(state => state.cart.totalPrice)
+
   return (
     <Container>
 
@@ -14,12 +16,17 @@ const Home = () => {
       </Typography>
 
       <Box display='flex' justifyContent='space-between'>
-        {items.map((item, index) => <ProductCard key={index} item={item} />)}
+        {items.map((item, index) => <ProductCard key={index} item={item} inCart={true} />)}
       </Box>
+
+      <Typography variant='h5' component='p' align='center'>
+        Totalprice: {totalPrice}$
+      </Typography>
+
 
     </Container>
   )
 }
 
-export default Home
+export default Cart
 

@@ -7,11 +7,11 @@ import { ROLE } from '../clientConfig'
 
 import Admin from '../views/admin'
 import AllUsers from '../views/all-users'
+import Cart from '../views/cart'
 import Home from '../views/home'
 import Login from '../views/login'
 import Moder from '../views/moder'
 import UserInfo from '../views/user-info'
-
 function Router() {
 
   const userRouts = [
@@ -38,6 +38,9 @@ function Router() {
 
       <Route path='/register'>
         <Login isRegistered={false} />
+      </Route>
+      <Route path='/cart'>
+        <Cart />
       </Route>
       <Route exact path='/'>
         {roles.length > 0 ?
