@@ -6,23 +6,30 @@ import store from './redux/store'
 import Header from './components/header'
 import Footer from './components/footer'
 import './App.scss'
+import { PersistGate } from 'redux-persist/integration/react'
+import { persistStore } from 'redux-persist'
+
+let persistor = persistStore(store)
+
 function App() {
 
   const isAuthorized = document.cookie.replace(/(?:(?:^|.*;\s*)isAuthorized\s*=\s*([^;]*).*$)|^.*$/, "$1")
 
   return (
     <Provider store={store}>
-      <BrowserRouter>
-        <div className='app-wrapper'>
-          <Header isAuthorized={isAuthorized} />
-          <div className='app-content'>
-            <Switch>
-              <Router />
-            </Switch>
+      <PersistGate loading={null} persistor={persistor}>
+        <BrowserRouter>
+          <div className='app-wrapper'>
+            <Header isAuthorized={isAuthorized} />
+            <div className='app-content'>
+              <Switch>
+                <Router />
+              </Switch>
+            </div>
+            <Footer />
           </div>
-          <Footer />
-        </div>
-      </BrowserRouter>
+        </BrowserRouter>
+      </PersistGate>
     </Provider>
   )
 }

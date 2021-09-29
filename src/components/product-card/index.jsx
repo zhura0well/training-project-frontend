@@ -1,13 +1,25 @@
-import React from 'react'
-import { Button, Typography, Card, CardActions, CardContent, CardMedia, Box } from '@material-ui/core'
+import React, { useState } from 'react'
+import { Button, Typography, Card, CardActions, CardContent, CardMedia, Box, IconButton } from '@material-ui/core'
 import { PropTypes } from 'prop-types'
 import './styles.scss'
 import { useDispatch } from 'react-redux'
-import { addToCart } from '../../redux/reducers/cartReducer'
+import { subQuantity, addQuantity, addToCart } from '../../redux/reducers/cartReducer'
+import { Add, Remove } from '@material-ui/icons'
+import SuccessSnackbar from '../success-snackbar'
 
 const ProductCard = ({ item, inCart }) => {
 
+  const [successMessage, setSuccessMessage] = useState('')
+  const [isMessageShown, setIsMessageShown] = useState(false)
+
   const dispatch = useDispatch()
+
+  const onButtonClick = (id) => {
+    dispatch(addToCart({ id: id }))
+
+    setSuccessMessage('Added to shopping cart)')
+    setIsMessageShown(true)
+  }
 
   return (
     <Card className='card-container'>
@@ -31,31 +43,57 @@ const ProductCard = ({ item, inCart }) => {
         <Typography variant='body2'>
           {item.description}
         </Typography>
-
-        {inCart &&
-          <Typography variant='h4' component='div'>
-            Quantity: {item.quantity}
-          </Typography>
-        }
-      </CardContent>
-      {!inCart &&
         <CardActions className='card-actions-section'>
-          <Button size='small'
-            variant='contained'
-            color='primary'>
-            Learn more
-          </Button>
-          <Button size='small'
-            variant='contained'
-            color='primary'
-            onClick={() => dispatch(addToCart({ id: item.id }))}>
-            Add to cart
-          </Button>
-        </CardActions>}
+          {inCart ?
+            <>
+              <IconButton
+                size='medium'
+                edge='start'
+                color='inherit'
+                sx={{ mr: 2 }}
+                onClick={() => dispatch(addQuantity({ id: item.id }))}
+              >
+                <Add />
+              </IconButton>
+              <Typography variant='h4' component='div'>
+                Quantity: {item.quantity}
+              </Typography>
 
+              <IconButton
+                size='medium'
+                edge='start'
+                color='inherit'
+                sx={{ mr: 2 }}
+                onClick={() => dispatch(subQuantity({ id: item.id }))}>
+                <Remove />
+              </IconButton>
+            </>
+
+            :
+
+            <>
+              <Button size='small'
+                variant='contained'
+                color='primary'>
+                Learn more
+              </Button>
+              <Button size='small'
+                variant='contained'
+                color='primary'
+                onClick={() => onButtonClick(item.id)}>
+                Add to cart
+              </Button>
+            </>
+          }
+
+        </CardActions>
+      </CardContent>
+
+      {isMessageShown && <SuccessSnackbar successMessage={successMessage} setIsMessageShown={setIsMessageShown} />}
     </Card>
   )
 }
+
 
 ProductCard.propTypes = {
   item: PropTypes.shape({
