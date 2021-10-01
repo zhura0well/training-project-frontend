@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, Redirect } from 'react-router-dom'
+import { Route } from 'react-router-dom'
 import { ROLE } from '../clientConfig'
 
 /*can't import from config.js
@@ -43,9 +43,8 @@ function Router() {
         <Cart />
       </Route>
       <Route exact path='/'>
-        {roles.length > 0 ?
-          <Home />
-          : <Redirect push to='/login' />}
+
+        <Home />
       </Route>
       {
         roles.includes(ROLE.USER) &&

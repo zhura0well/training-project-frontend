@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux'
 import { subQuantity, addQuantity, addToCart } from '../../redux/reducers/cartReducer'
 import { Add, Remove } from '@material-ui/icons'
 import SuccessSnackbar from '../success-snackbar'
+import imagePlaceholder from '../../assets/image-placeholder.jpg'
 
 const ProductCard = ({ item, inCart }) => {
 
@@ -14,8 +15,8 @@ const ProductCard = ({ item, inCart }) => {
 
   const dispatch = useDispatch()
 
-  const onButtonClick = (id) => {
-    dispatch(addToCart({ id: id }))
+  const onButtonClick = (_id) => {
+    dispatch(addToCart({ _id: _id }))
 
     setSuccessMessage('Added to shopping cart)')
     setIsMessageShown(true)
@@ -25,7 +26,7 @@ const ProductCard = ({ item, inCart }) => {
     <Card className='card-container'>
       <CardMedia
         component='img'
-        image={item.image}
+        image={item.image || imagePlaceholder}
         alt='card image'
       />
       <CardContent>
@@ -51,7 +52,7 @@ const ProductCard = ({ item, inCart }) => {
                 edge='start'
                 color='inherit'
                 sx={{ mr: 2 }}
-                onClick={() => dispatch(addQuantity({ id: item.id }))}
+                onClick={() => dispatch(addQuantity({ _id: item._id }))}
               >
                 <Add />
               </IconButton>
@@ -64,7 +65,7 @@ const ProductCard = ({ item, inCart }) => {
                 edge='start'
                 color='inherit'
                 sx={{ mr: 2 }}
-                onClick={() => dispatch(subQuantity({ id: item.id }))}>
+                onClick={() => dispatch(subQuantity({ _id: item._id }))}>
                 <Remove />
               </IconButton>
             </>
@@ -80,7 +81,7 @@ const ProductCard = ({ item, inCart }) => {
               <Button size='small'
                 variant='contained'
                 color='primary'
-                onClick={() => onButtonClick(item.id)}>
+                onClick={() => onButtonClick(item._id)}>
                 Add to cart
               </Button>
             </>
@@ -97,7 +98,7 @@ const ProductCard = ({ item, inCart }) => {
 
 ProductCard.propTypes = {
   item: PropTypes.shape({
-    id: PropTypes.number,
+    _id: PropTypes.string,
     title: PropTypes.string,
     description: PropTypes.string,
     image: PropTypes.string,
