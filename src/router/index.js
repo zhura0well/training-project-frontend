@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, Redirect } from 'react-router-dom'
+import { Route, Redirect, Switch } from 'react-router-dom'
 import { ROLE } from '../clientConfig'
 
 /*can't import from config.js
@@ -10,8 +10,8 @@ import AllUsers from '../views/all-users'
 import Home from '../views/home'
 import Login from '../views/login'
 import Moder from '../views/moder'
+import NotFoundPage from '../views/not-found-page'
 import UserInfo from '../views/user-info'
-
 function Router() {
 
   const userRouts = [
@@ -31,7 +31,7 @@ function Router() {
   const roles = localStorage.getItem('roles') || ''
 
   return (
-    <>
+    <Switch>
       <Route path='/login'>
         <Login isRegistered={true} />
       </Route>
@@ -47,7 +47,7 @@ function Router() {
       {
         roles.includes(ROLE.USER) &&
         userRouts.map((route, index) => (
-          <Route path={route.path} key={index}>
+          <Route exact path={route.path} key={index}>
             {route.component}
           </Route>
         ))}
@@ -55,7 +55,7 @@ function Router() {
       {
         roles.includes(ROLE.MODER) &&
         moderRouts.map((route, index) => (
-          <Route path={route.path} key={index}>
+          <Route exact path={route.path} key={index}>
             {route.component}
           </Route>
         ))}
@@ -63,12 +63,16 @@ function Router() {
       {
         roles.includes(ROLE.ADMIN) &&
         adminRouts.map((route, index) => (
-          <Route path={route.path} key={index}>
+          <Route exact path={route.path} key={index}>
             {route.component}
           </Route>
         ))}
 
-    </>
+      <Route>
+        <NotFoundPage />
+      </Route>
+
+    </Switch>
   )
 }
 

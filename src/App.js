@@ -1,5 +1,5 @@
 import React from 'react'
-import { BrowserRouter, Switch } from 'react-router-dom'
+import { BrowserRouter } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import Router from './router'
 import store from './redux/store'
@@ -16,9 +16,7 @@ function App() {
         <div className='app-wrapper'>
           <Header isAuthorized={isAuthorized} />
           <div className='app-content'>
-            <Switch>
-              <Router />
-            </Switch>
+            <Router />
           </div>
           <Footer />
         </div>
