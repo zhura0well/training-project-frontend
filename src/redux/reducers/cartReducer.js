@@ -22,7 +22,6 @@ const cartSlice = createSlice({
 
       if (existedItem) {
         existedItem.quantity += 1
-        console.log(state.items)
       } else {
         addedItem.quantity = 1
         state.addedItems.push(addedItem)

@@ -1,13 +1,17 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Container, Grid } from '@material-ui/core'
 import ProductCard from '../../components/product-card'
 import { useSelector, useDispatch } from 'react-redux'
 import { getData } from '../../requests'
 import { setItems } from '../../redux/reducers/cartReducer'
-
+import ErrorSnackbar from '../../components/error-snackbar'
 const Home = () => {
 
   const dispatch = useDispatch()
+
+  const [error, setError] = useState('')
+  const [isErrorShown, setIsErrorShown] = useState(false)
+
 
   useEffect(() => {
     getData('/api/products')
@@ -15,7 +19,8 @@ const Home = () => {
         dispatch(setItems({ items: response }))
       })
       .catch(e => {
-        console.log(e)
+        setError(e.statusText)
+        setIsErrorShown(true)
       })
   }, [])
 
@@ -33,6 +38,7 @@ const Home = () => {
         }
         )}
       </Grid>
+      {isErrorShown && <ErrorSnackbar errorMessage={error} setIsErrorShown={setIsErrorShown} />}
     </Container>
   )
 }
