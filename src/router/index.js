@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, Redirect } from 'react-router-dom'
+import { Route, Switch } from 'react-router-dom'
 import { ROLE } from '../clientConfig'
 
 /*can't import from config.js
@@ -7,11 +7,12 @@ import { ROLE } from '../clientConfig'
 
 import Admin from '../views/admin'
 import AllUsers from '../views/all-users'
+import Cart from '../views/cart'
 import Home from '../views/home'
 import Login from '../views/login'
 import Moder from '../views/moder'
+import NotFoundPage from '../views/not-found-page'
 import UserInfo from '../views/user-info'
-
 function Router() {
 
   const userRouts = [
@@ -31,7 +32,7 @@ function Router() {
   const roles = localStorage.getItem('roles') || ''
 
   return (
-    <>
+    <Switch>
       <Route path='/login'>
         <Login isRegistered={true} />
       </Route>
@@ -39,15 +40,17 @@ function Router() {
       <Route path='/register'>
         <Login isRegistered={false} />
       </Route>
+      <Route path='/cart'>
+        <Cart />
+      </Route>
       <Route exact path='/'>
-        {roles.length > 0 ?
-          <Home />
-          : <Redirect push to='/login' />}
+
+        <Home />
       </Route>
       {
         roles.includes(ROLE.USER) &&
         userRouts.map((route, index) => (
-          <Route path={route.path} key={index}>
+          <Route exact path={route.path} key={index}>
             {route.component}
           </Route>
         ))}
@@ -55,7 +58,7 @@ function Router() {
       {
         roles.includes(ROLE.MODER) &&
         moderRouts.map((route, index) => (
-          <Route path={route.path} key={index}>
+          <Route exact path={route.path} key={index}>
             {route.component}
           </Route>
         ))}
@@ -63,12 +66,16 @@ function Router() {
       {
         roles.includes(ROLE.ADMIN) &&
         adminRouts.map((route, index) => (
-          <Route path={route.path} key={index}>
+          <Route exact path={route.path} key={index}>
             {route.component}
           </Route>
         ))}
 
-    </>
+      <Route>
+        <NotFoundPage />
+      </Route>
+
+    </Switch>
   )
 }
 
