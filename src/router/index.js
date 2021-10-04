@@ -13,6 +13,8 @@ import Login from '../views/login'
 import Moder from '../views/moder'
 import NotFoundPage from '../views/not-found-page'
 import UserInfo from '../views/user-info'
+import AddItem from '../views/add-item'
+
 function Router() {
 
   const userRouts = [
@@ -21,6 +23,7 @@ function Router() {
 
   const moderRouts = [
     { path: '/moder', component: <Moder /> },
+    {path: '/add-item', component: <AddItem />}
   ]
 
   const adminRouts = [
