@@ -33,3 +33,29 @@ export const patchData = async (url, data) => {
   return response.ok ? response.json() : Promise.reject(response)
 }
 
+export const putData = async (url, data) => {
+  const response = await fetch(backendUrl + url, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
+    mode: 'cors',
+    body: JSON.stringify(data)
+  })
+  return response.ok ? response.json() : Promise.reject(response)
+}
+
+export const deleteData = async (url) => {
+  const response = await fetch(backendUrl + url, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
+    mode: 'cors',
+  })
+  return response.ok ? response.json() : Promise.reject(response)
+}
+
+

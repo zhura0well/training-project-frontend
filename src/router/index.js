@@ -23,7 +23,8 @@ function Router() {
 
   const moderRouts = [
     { path: '/moder', component: <Moder /> },
-    {path: '/add-item', component: <AddItem />}
+    { path: '/add-item', component: <AddItem />},
+    { path: '/add-item/:id', component: <AddItem isEditable={true}/>}
   ]
 
   const adminRouts = [

@@ -1,11 +1,14 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Container, Typography, Box, TextField, Button } from '@material-ui/core'
-import { postData } from '../../requests'
+import { deleteData, getData, postData, putData } from '../../requests'
 import ErrorSnackbar from '../../components/error-snackbar'
 import SuccessSnackbar from '../../components/success-snackbar'
+import { PropTypes } from 'prop-types'
+import { useParams } from 'react-router'
 
-const AddItem = () => {
+const AddItem = ({ isEditable }) => {
 
+  const { id } = useParams()
   const [item, setItem] = useState({
     title: '',
     description: '',
@@ -18,6 +21,20 @@ const AddItem = () => {
   const [successMessage, setSuccessMessage] = useState('')
   const [isMessageShown, setIsMessageShown] = useState(false)
 
+
+  useEffect(() => {
+    if (isEditable) {
+      getData(`/api/products/${id}`)
+        .then(response => setItem(response))
+        .catch(e => {
+          setError(e.statusText)
+          setIsErrorShown(true)
+        })
+    }
+
+  }, [])
+
+
   const reset = () => setItem({
     title: '',
     description: '',
@@ -28,9 +45,36 @@ const AddItem = () => {
   const addItem = () => {
     postData(`/api/products`, item)
       .then(() => {
-        reset()
         setSuccessMessage('Successfully added!')
         setIsMessageShown(true)
+        reset()
+      })
+      .catch(e => {
+        setError(e.statusText)
+        setIsErrorShown(true)
+      })
+  }
+
+
+  const editItem = () => {
+    putData(`/api/products/${id}`, item)
+      .then(() => {
+        setSuccessMessage('Successfully updated!')
+        setIsMessageShown(true)
+        reset()
+      })
+      .catch(e => {
+        setError(e.statusText)
+        setIsErrorShown(true)
+      })
+  }
+
+  const deleteItem = () => {
+    deleteData(`/api/products/${id}`)
+      .then(() => {
+        setSuccessMessage('Successfully deleted!')
+        setIsMessageShown(true)
+        reset()
       })
       .catch(e => {
         setError(e.statusText)
@@ -44,7 +88,7 @@ const AddItem = () => {
 
       <Box mb={5}>
         <Typography variant='h5' align='center'>
-          Do you want to add an item?
+          Do you want to add/edit an item?
         </Typography>
         <Typography variant='h6' align='center'>
           Please fill in
@@ -95,10 +139,10 @@ const AddItem = () => {
             <Button
               variant='contained'
               color='primary'
-              onClick={addItem}
+              onClick={isEditable ? () => editItem() : () => addItem()}
               size='large'
             >
-              Add item
+              Save
             </Button>
 
             <Button
@@ -108,6 +152,15 @@ const AddItem = () => {
             >
               Reset
             </Button>
+
+            {isEditable && <Button
+              variant='contained'
+              onClick={deleteItem}
+              size='large'
+              style={{ backgroundColor: '#bf2202', color: '#FFFFFF' }}
+            >
+              Delete
+            </Button>}
           </Box>
 
 
@@ -119,6 +172,12 @@ const AddItem = () => {
   )
 
 }
+
+AddItem.propTypes = {
+  isEditable: PropTypes.bool
+}
+
+
 
 export default AddItem
 
