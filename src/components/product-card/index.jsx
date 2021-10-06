@@ -7,15 +7,13 @@ import { subQuantity, addQuantity, addToCart } from '../../redux/reducers/cartRe
 import { Add, Remove } from '@material-ui/icons'
 import SuccessSnackbar from '../success-snackbar'
 import imagePlaceholder from '../../assets/image-placeholder.jpg'
-import { useHistory } from 'react-router'
-
+import { useHistory } from 'react-router-dom'
 const ProductCard = ({ item, inCart }) => {
 
   const [successMessage, setSuccessMessage] = useState('')
   const [isMessageShown, setIsMessageShown] = useState(false)
-
-  const dispatch = useDispatch()
   const history = useHistory()
+  const dispatch = useDispatch()
 
   const onButtonClick = (_id) => {
     dispatch(addToCart({ _id: _id }))
