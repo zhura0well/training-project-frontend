@@ -25,8 +25,8 @@ const Header = ({ isAuthorized }) => {
             <NavLink className='link' activeClassName='link-active' exact to='/'>
               Home
             </NavLink>
-            <NavLink className='link' activeClassName='link-active' exact to='/user'>
-              User
+            <NavLink className='link' activeClassName='link-active' exact to='/add-item'>
+              Add item
             </NavLink>
             <NavLink className='link' activeClassName='link-active' exact to='/admin/all-users'>
               Admin
