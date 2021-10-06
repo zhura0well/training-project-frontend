@@ -12,6 +12,7 @@ import Home from '../views/home'
 import Login from '../views/login'
 import Moder from '../views/moder'
 import NotFoundPage from '../views/not-found-page'
+import ProductInfo from '../views/product-info'
 import UserInfo from '../views/user-info'
 function Router() {
 
@@ -40,13 +41,19 @@ function Router() {
       <Route path='/register'>
         <Login isRegistered={false} />
       </Route>
+
       <Route path='/cart'>
         <Cart />
       </Route>
-      <Route exact path='/'>
 
+      <Route path='/product-info/:id'>
+        <ProductInfo />
+      </Route>
+
+      <Route exact path='/'>
         <Home />
       </Route>
+
       {
         roles.includes(ROLE.USER) &&
         userRouts.map((route, index) => (

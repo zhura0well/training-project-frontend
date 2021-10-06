@@ -7,6 +7,7 @@ import { subQuantity, addQuantity, addToCart } from '../../redux/reducers/cartRe
 import { Add, Remove } from '@material-ui/icons'
 import SuccessSnackbar from '../success-snackbar'
 import imagePlaceholder from '../../assets/image-placeholder.jpg'
+import { useHistory } from 'react-router'
 
 const ProductCard = ({ item, inCart }) => {
 
@@ -14,6 +15,7 @@ const ProductCard = ({ item, inCart }) => {
   const [isMessageShown, setIsMessageShown] = useState(false)
 
   const dispatch = useDispatch()
+  const history = useHistory()
 
   const onButtonClick = (_id) => {
     dispatch(addToCart({ _id: _id }))
@@ -75,7 +77,8 @@ const ProductCard = ({ item, inCart }) => {
             <>
               <Button size='small'
                 variant='contained'
-                color='primary'>
+                color='primary'
+                onClick={() => history.push(`/product-info/${item._id}`)}>
                 Learn more
               </Button>
               <Button size='small'
