@@ -8,12 +8,16 @@ import { Add, Remove } from '@material-ui/icons'
 import SuccessSnackbar from '../success-snackbar'
 import imagePlaceholder from '../../assets/image-placeholder.jpg'
 import { useHistory } from 'react-router-dom'
+import { ROLE } from '../../clientConfig'
+
 const ProductCard = ({ item, inCart }) => {
 
   const [successMessage, setSuccessMessage] = useState('')
   const [isMessageShown, setIsMessageShown] = useState(false)
   const history = useHistory()
   const dispatch = useDispatch()
+
+  const roles = localStorage.getItem('roles') || ''
 
   const onButtonClick = (_id) => {
     dispatch(addToCart({ _id: _id }))
@@ -79,12 +83,21 @@ const ProductCard = ({ item, inCart }) => {
                 onClick={() => history.push(`/product-info/${item._id}`)}>
                 Learn more
               </Button>
+
               <Button size='small'
                 variant='contained'
                 color='primary'
                 onClick={() => onButtonClick(item._id)}>
                 Add to cart
               </Button>
+
+              {roles.includes(ROLE.MODER) &&
+                <Button size='small'
+                  variant='contained'
+                  style={{ backgroundColor: '#007300', color: '#ffffff' }}
+                  onClick={() => history.push(`/add-item/${item._id}`)}>
+                  Update
+                </Button>}
             </>
           }
 
