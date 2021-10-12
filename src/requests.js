@@ -1,4 +1,4 @@
-import { backendUrl } from "./clientConfig"
+import { backendUrl } from './clientConfig'
 
 export const getData = async (url) => {
   const response = await fetch(backendUrl + url, {
@@ -54,6 +54,18 @@ export const deleteData = async (url) => {
     },
     credentials: 'include',
     mode: 'cors',
+  })
+  return response.ok ? response.json() : Promise.reject(response)
+}
+
+export const putImage = async (url, image) => {
+  const formData = new FormData()
+  formData.append('file', image)
+  const response = await fetch(backendUrl + url, {
+    method: 'PUT',
+    credentials: 'include',
+    mode: 'cors',
+    body: formData
   })
   return response.ok ? response.json() : Promise.reject(response)
 }
