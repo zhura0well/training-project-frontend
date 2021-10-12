@@ -4,7 +4,8 @@ import { Menu, ShoppingCart } from '@material-ui/icons'
 import PropTypes from 'prop-types'
 import { NavLink } from 'react-router-dom'
 import './styles.scss'
-const Header = ({ isAuthorized }) => {
+import { ROLE } from '../../clientConfig'
+const Header = ({ roles }) => {
 
 
   return (
@@ -25,14 +26,20 @@ const Header = ({ isAuthorized }) => {
             <NavLink className='link' activeClassName='link-active' exact to='/'>
               Home
             </NavLink>
+            <NavLink className='link' activeClassName='link-active' exact to='/about'>
+              About us?
+            </NavLink>
+            {roles.includes(ROLE.MODER) &&
             <NavLink className='link' activeClassName='link-active' exact to='/add-item'>
               Add item
-            </NavLink>
-            <NavLink className='link' activeClassName='link-active' exact to='/admin/all-users'>
-              Admin
-            </NavLink>
+            </NavLink>}
+            {roles.includes(ROLE.ADMIN) &&
+              <NavLink className='link' activeClassName='link-active' exact to='/admin/all-users'>
+                Admin
+              </NavLink>}
+
             <NavLink exact to='/login' className='link' activeClassName='link-active'>
-              {!isAuthorized ? 'Login' : 'Logout'}
+              {!roles ? 'Login' : 'Logout'}
             </NavLink>
             <NavLink exact to='/cart' className='link' activeClassName='link-active'>
               <IconButton
@@ -51,6 +58,6 @@ const Header = ({ isAuthorized }) => {
     </header>)
 }
 
-Header.propTypes = { isAuthorized: PropTypes.string }
+Header.propTypes = { roles: PropTypes.string }
 
 export default Header
