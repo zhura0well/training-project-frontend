@@ -2,11 +2,14 @@ import React from 'react'
 import { Box, AppBar, Toolbar, IconButton, Container } from '@material-ui/core'
 import { Menu, ShoppingCart } from '@material-ui/icons'
 import PropTypes from 'prop-types'
-import { NavLink } from 'react-router-dom'
+import { NavLink} from 'react-router-dom'
 import './styles.scss'
 import { ROLE } from '../../clientConfig'
 const Header = ({ roles }) => {
 
+  const logout = async() => {
+    localStorage.removeItem('roles')
+  }
 
   return (
     <header>
@@ -38,9 +41,15 @@ const Header = ({ roles }) => {
                 Admin
               </NavLink>}
 
-            <NavLink exact to='/login' className='link' activeClassName='link-active'>
-              {!roles ? 'Login' : 'Logout'}
-            </NavLink>
+            {!roles ?
+              <NavLink exact to='/login' className='link' activeClassName='link-active'>
+                Login
+              </NavLink> :
+              <a className='link' href='/' onClick={logout}>
+                Logout
+              </a>
+            }
+
             <NavLink exact to='/cart' className='link' activeClassName='link-active'>
               <IconButton
                 size='medium'
