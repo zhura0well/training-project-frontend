@@ -5,6 +5,11 @@ import { useSelector, useDispatch } from 'react-redux'
 import { getData } from '../../requests'
 import { setItems } from '../../redux/reducers/cartReducer'
 import ErrorSnackbar from '../../components/error-snackbar'
+import CustomCarousel from '../../components/custom-carousel'
+import firstImage from '../../assets/slider-1.jpg'
+import secondImage from '../../assets/slider-2.jpg'
+import thirdImage from '../../assets/slider-3.jpg'
+
 const Home = () => {
 
   const dispatch = useDispatch()
@@ -25,8 +30,11 @@ const Home = () => {
   }, [])
 
   const items = useSelector(state => state.cart.items)
+  const images = [firstImage, secondImage, thirdImage]
+
   return (
     <Container>
+      <CustomCarousel items={images}/>
       <Grid spacing={10} container>
 
         {items.map((item, index) => {
