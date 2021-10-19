@@ -1,11 +1,27 @@
 import React from 'react'
-import { Box, AppBar, Toolbar, IconButton, Container } from '@material-ui/core'
+import { Box, AppBar, Toolbar, IconButton, Container, Button } from '@material-ui/core'
 import { Menu, ShoppingCart } from '@material-ui/icons'
 import PropTypes from 'prop-types'
 import { NavLink } from 'react-router-dom'
 import './styles.scss'
+import { putData } from '../../requests'
+import { useSelector } from 'react-redux'
 const Header = ({ isAuthorized }) => {
 
+  const items = useSelector(state => state.cart.addedItems)
+  const totalPrice = useSelector(state => state.cart.totalPrice)
+
+  const logout = () => {
+    const userId = localStorage.getItem('userId')
+    localStorage.clear()
+
+    putData(`/api/shoppingCart/${userId}`, {
+      cart: {
+        items,
+        totalPrice
+      }
+    })
+  }
 
   return (
     <header>
@@ -34,6 +50,10 @@ const Header = ({ isAuthorized }) => {
             <NavLink exact to='/login' className='link' activeClassName='link-active'>
               {!isAuthorized ? 'Login' : 'Logout'}
             </NavLink>
+            <Button onClick={logout}>
+              Logout
+            </Button>
+
             <NavLink exact to='/cart' className='link' activeClassName='link-active'>
               <IconButton
                 size='medium'

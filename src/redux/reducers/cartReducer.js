@@ -15,6 +15,20 @@ const cartSlice = createSlice({
       state.items = action.payload.items
     },
 
+    /*this part can be optimized if I change an addToCart function, but I'm not sure that it is a good decision */
+    setCartItems(state, action) {
+      const serverCartItems = action.payload.addedItems
+      for (let i = 0; i < serverCartItems.length; i++) {
+        const existedItem = state.addedItems.find(item => item._id === (serverCartItems[i]._id ))
+        if(existedItem){
+          existedItem.quantity += serverCartItems[i].quantity
+        } else {
+          state.addedItems.push(serverCartItems[i])
+        }
+      }
+      state.totalPrice += action.payload.totalPrice
+    },
+
     addToCart(state, action) {
       const addedItem = state.items.find(item => item._id === action.payload._id)
 
@@ -53,6 +67,6 @@ const cartSlice = createSlice({
   }
 })
 
-export const { setItems, addToCart, addQuantity, subQuantity } = cartSlice.actions
+export const { setItems, setCartItems,  addToCart, addQuantity, subQuantity } = cartSlice.actions
 
 export default cartSlice.reducer

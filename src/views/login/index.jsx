@@ -2,9 +2,11 @@ import React, { useState } from 'react'
 import { Avatar, Button, TextField, Link, Container, makeStyles, Typography, Box } from '@material-ui/core'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import PropTypes from 'prop-types'
-import { postData } from '../../requests'
+import { getData, postData } from '../../requests'
 import ErrorSnackbar from '../../components/error-snackbar'
 import { useHistory } from 'react-router'
+import { useDispatch } from 'react-redux'
+import { setCartItems } from '../../redux/reducers/cartReducer'
 
 const Login = (props) => {
 
@@ -27,7 +29,6 @@ const Login = (props) => {
       margin: theme.spacing(3, 0, 2),
     },
   }))
-
   const classes = useStyles()
 
   //Logic
@@ -39,12 +40,23 @@ const Login = (props) => {
   const [error, setError] = useState('')
   const [isErrorShown, setIsErrorShown] = useState(false)
 
+  const dispatch = useDispatch()
+
+
   const login = async () => {
     const url = props.isRegistered ? '/api/login' : '/api/register'
 
     postData(url, { username, password })
-      .then(response => localStorage.setItem('roles', response.roles))
+      .then(response => {
+        localStorage.setItem('roles', response.roles)
+        localStorage.setItem('userId', response._id)
+      })
       .then(() => {
+        const id = localStorage.getItem('userId')
+        getData(`/api/shoppingCart/${id}`)
+          .then(response => {
+            dispatch(setCartItems({ addedItems: response.items, totalPrice: response.totalPrice }))
+          })
         setUsername('')
         setPassword('')
         history.replace('/')
@@ -103,7 +115,7 @@ const Login = (props) => {
           </Box>
         </form>
       </div>
-      {isErrorShown && <ErrorSnackbar errorMessage={error} setIsErrorShown={setIsErrorShown}/>}
+      {isErrorShown && <ErrorSnackbar errorMessage={error} setIsErrorShown={setIsErrorShown} />}
     </Container>
   )
 }
