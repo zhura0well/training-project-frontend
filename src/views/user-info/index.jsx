@@ -27,8 +27,10 @@ const UserInfo = () => {
   const [successMessage, setSuccessMessage] = useState('')
   const [isMessageShown, setIsMessageShown] = useState(false)
 
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
+    setLoading(true)
     getData(`/api/roles/${id}`)
       .then(response => {
         dispatch(setUser({ user: response }))
@@ -37,6 +39,7 @@ const UserInfo = () => {
         setError(e.statusText)
         setIsErrorShown(true)
       })
+      .finally(() => setTimeout(() => setLoading(false), 1000))
   }, [])
 
   const onRoleChange = (e) => {
@@ -60,8 +63,8 @@ const UserInfo = () => {
 
   return (
     <Container component='main' maxWidth='lg'>
-      {!user && <Spinner />}
-      {user && <Box m={10} sx={{ textAlign: 'center' }}>
+      {loading && <Spinner />}
+      {!loading && <Box m={10} sx={{ textAlign: 'center' }}>
         <Box display='flex' alignItems='center'>
           <img src={avatarPlaceholder} className='user-info-avatar' alt="No-avatar image" />
           <p className='user-info-biography'>Some info: Lorem ipsum dolor sit, amet consectetur adipisicing elit. Reiciendis magnam ipsa ipsum sit corporis pariatur voluptate quaerat perspiciatis vitae quo consectetur doloremque, quibusdam consequatur nemo aliquam quis porro, sint eligendi!</p>

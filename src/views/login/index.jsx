@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import { postData } from '../../requests'
 import ErrorSnackbar from '../../components/error-snackbar'
 import { useHistory } from 'react-router'
+import Spinner from '../../components/spinner'
 
 const Login = (props) => {
 
@@ -39,7 +40,11 @@ const Login = (props) => {
   const [error, setError] = useState('')
   const [isErrorShown, setIsErrorShown] = useState(false)
 
+  const [loading, setLoading] = useState(false)
+
+
   const login = async () => {
+    setLoading(true)
     const url = props.isRegistered ? '/api/login' : '/api/register'
 
     postData(url, { username, password })
@@ -53,11 +58,13 @@ const Login = (props) => {
         setError(e.statusText)
         setIsErrorShown(true)
       })
+      .finally(() => setTimeout(() => setLoading(false), 1000))
   }
 
   return (
     <Container component='main' maxWidth='xs'>
-      <div className={classes.paper}>
+      {loading && <Spinner />}
+      {!loading && <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
         </Avatar>
@@ -103,7 +110,8 @@ const Login = (props) => {
           </Box>
         </form>
       </div>
-      {isErrorShown && <ErrorSnackbar errorMessage={error} setIsErrorShown={setIsErrorShown}/>}
+      }
+      {isErrorShown && <ErrorSnackbar errorMessage={error} setIsErrorShown={setIsErrorShown} />}
     </Container>
   )
 }

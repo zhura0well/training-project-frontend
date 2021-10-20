@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { getData } from '../../requests'
 import { setItems } from '../../redux/reducers/cartReducer'
 import ErrorSnackbar from '../../components/error-snackbar'
+import Spinner from '../../components/spinner'
 const Home = () => {
 
   const dispatch = useDispatch()
@@ -12,8 +13,10 @@ const Home = () => {
   const [error, setError] = useState('')
   const [isErrorShown, setIsErrorShown] = useState(false)
 
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
+    setLoading(true)
     getData('/api/products')
       .then(response => {
         dispatch(setItems({ items: response }))
@@ -22,12 +25,14 @@ const Home = () => {
         setError(e.statusText)
         setIsErrorShown(true)
       })
+      .finally(() => setTimeout(() => setLoading(false), 1000))
   }, [])
 
   const items = useSelector(state => state.cart.items)
   return (
     <Container>
-      <Grid spacing={10} container>
+      {loading && <Spinner />}
+      {!loading && <Grid spacing={10} container>
 
         {items.map((item, index) => {
           return (
@@ -38,6 +43,7 @@ const Home = () => {
         }
         )}
       </Grid>
+      }
       {isErrorShown && <ErrorSnackbar errorMessage={error} setIsErrorShown={setIsErrorShown} />}
     </Container>
   )
