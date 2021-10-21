@@ -1,12 +1,14 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Container, Typography, Grid, Box, Button } from '@material-ui/core'
 import ProductCard from '../../components/product-card'
 import { useSelector } from 'react-redux'
-
+import OrderModal from '../../components/order-modal'
 const Cart = () => {
 
   const items = useSelector(state => state.cart.addedItems)
   const totalPrice = useSelector(state => state.cart.totalPrice)
+
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   return (
     <Container>
@@ -41,7 +43,8 @@ const Cart = () => {
                 <Button
                   size='large'
                   variant='contained'
-                  color='primary'>
+                  color='primary'
+                  onClick={() => setIsModalOpen(true)}>
                   Checkout
                 </Button>
               </Box>
@@ -50,6 +53,7 @@ const Cart = () => {
 
 
           </Box>
+          <OrderModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen}/>
         </>
         :
         <>
