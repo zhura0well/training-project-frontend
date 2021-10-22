@@ -5,11 +5,31 @@ import { useSelector } from 'react-redux'
 import OrderModal from '../../components/order-modal'
 const Cart = () => {
 
+  const [orderData, setOrderData] = useState({
+    email: '',
+    phone: '',
+    cart: {
+      items: [],
+      totalPrice: 0
+    }
+
+  })
+
   const items = useSelector(state => state.cart.addedItems)
   const totalPrice = useSelector(state => state.cart.totalPrice)
 
   const [isModalOpen, setIsModalOpen] = useState(false)
 
+  const placeOrder = () => {
+    // setOrderData({ cart: { items, totalPrice } })
+    setOrderData({
+      cart: {
+        items: items.map(item => ({ _id: item._id, quantity: item.quantity })),
+        totalPrice
+      }
+    })
+    setIsModalOpen(true)
+  }
   return (
     <Container>
       {totalPrice ?
@@ -44,7 +64,7 @@ const Cart = () => {
                   size='large'
                   variant='contained'
                   color='primary'
-                  onClick={() => setIsModalOpen(true)}>
+                  onClick={placeOrder}>
                   Checkout
                 </Button>
               </Box>
@@ -53,7 +73,11 @@ const Cart = () => {
 
 
           </Box>
-          <OrderModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen}/>
+          <OrderModal
+            isModalOpen={isModalOpen}
+            setIsModalOpen={setIsModalOpen}
+            orderData={orderData}
+            setOrderData={setOrderData} />
         </>
         :
         <>

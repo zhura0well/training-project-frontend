@@ -6,10 +6,7 @@ import { postData } from '../../requests'
 import ErrorSnackbar from '../error-snackbar'
 import SuccessSnackbar from '../success-snackbar'
 
-const OrderModal = ({ isModalOpen, setIsModalOpen }) => {
-
-  const [email, setEmail] = useState('')
-  const [phone, setPhone] = useState('')
+const OrderModal = ({ isModalOpen, setIsModalOpen, orderData, setOrderData }) => {
 
 
   const [error, setError] = useState('')
@@ -36,11 +33,24 @@ const OrderModal = ({ isModalOpen, setIsModalOpen }) => {
   const onModalClose = () => setIsModalOpen(false)
 
   const postOrderData = () => {
-    postData('/api/testPoint', { email, phone })
+    postData('/api/orders/placeOrder', orderData)
       .then(() => {
-        setSuccessMessage('Successfully updated!')
+
+        setOrderData({
+          email: '',
+          phone: '',
+          cart: {
+            items: [],
+            totalPrice: 0
+          }
+        })
+
+        localStorage.removeItem('persist:root')
+
+        setSuccessMessage('Order created!')
         setIsMessageShown(true)
       })
+      .then(() => setTimeout(() => window.location.reload(), 3000))
       .catch(e => {
         setError(e.statusText)
         setIsErrorShown(true)
@@ -67,19 +77,19 @@ const OrderModal = ({ isModalOpen, setIsModalOpen }) => {
             Enter your data
           </Typography>
           <TextField
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={orderData.email}
+            onChange={(e) => setOrderData({ ...orderData, email: e.target.value })}
             margin='normal'
             required
             fullWidth
-            label='Username'
+            label='Email'
             autoFocus
             size='small'
             type='email'
           />
           <TextField
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
+            value={orderData.phone}
+            onChange={(e) => setOrderData({ ...orderData, phone: e.target.value })}
             margin='normal'
             required
             fullWidth
@@ -90,7 +100,7 @@ const OrderModal = ({ isModalOpen, setIsModalOpen }) => {
           />
           <Box mt={5}>
             <Button
-
+              type='submit'
               fullWidth
               variant='contained'
               color='primary'
@@ -112,6 +122,12 @@ const OrderModal = ({ isModalOpen, setIsModalOpen }) => {
 OrderModal.propTypes = {
   isModalOpen: PropTypes.bool,
   setIsModalOpen: PropTypes.func,
+  orderData: PropTypes.shape({
+    email: PropTypes.string,
+    phone: PropTypes.number,
+  }),
+  setOrderData: PropTypes.func
+
 }
 export default OrderModal
 
