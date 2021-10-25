@@ -12,6 +12,7 @@ const reducers = combineReducers({
   cart: cartReducer
 })
 
+
 const persistConfig = {
   key: 'root',
   storage,
@@ -22,5 +23,8 @@ const persistedReducer = persistReducer(persistConfig, reducers)
 
 
 export default configureStore({
-  reducer: persistedReducer
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+    serializableCheck: false
+  })
 })
