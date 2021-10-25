@@ -6,7 +6,7 @@ import { getData, postData } from '../../requests'
 import ErrorSnackbar from '../../components/error-snackbar'
 import { useHistory } from 'react-router'
 import { useDispatch } from 'react-redux'
-import { setCartItems } from '../../redux/reducers/cartReducer'
+import { addToCart } from '../../redux/reducers/cartReducer'
 
 const Login = (props) => {
 
@@ -55,7 +55,10 @@ const Login = (props) => {
         const id = localStorage.getItem('userId')
         getData(`/api/shoppingCart/${id}`)
           .then(response => {
-            dispatch(setCartItems({ addedItems: response.items, totalPrice: response.totalPrice }))
+            const cartItems = response.items
+            for(let i = 0; i < cartItems.length; i++) {
+              dispatch(addToCart({ _id: cartItems[i]._id, quantity: cartItems[i].quantity }))
+            }
           })
         setUsername('')
         setPassword('')

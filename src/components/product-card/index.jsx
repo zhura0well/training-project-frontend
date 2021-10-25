@@ -20,7 +20,7 @@ const ProductCard = ({ item, inCart }) => {
   const roles = localStorage.getItem('roles') || ''
 
   const onButtonClick = (_id) => {
-    dispatch(addToCart({ _id: _id }))
+    dispatch(addToCart({ _id: _id, quantity: 1 }))
 
     setSuccessMessage('Added to shopping cart)')
     setIsMessageShown(true)
