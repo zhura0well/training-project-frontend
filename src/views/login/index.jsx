@@ -5,7 +5,6 @@ import PropTypes from 'prop-types'
 import { postData } from '../../requests'
 import ErrorSnackbar from '../../components/error-snackbar'
 import { useHistory } from 'react-router'
-
 const Login = (props) => {
 
   //Styles
@@ -32,7 +31,6 @@ const Login = (props) => {
 
   //Logic
   const history = useHistory()
-
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
@@ -43,11 +41,14 @@ const Login = (props) => {
     const url = props.isRegistered ? '/api/login' : '/api/register'
 
     postData(url, { username, password })
-      .then(response => localStorage.setItem('roles', response.roles))
+      .then(response => {
+        localStorage.setItem('roles', response.roles)
+        history.push('/')
+      })
       .then(() => {
         setUsername('')
         setPassword('')
-        history.replace('/')
+        window.location.reload()
       })
       .catch(e => {
         setError(e.statusText)
@@ -103,7 +104,7 @@ const Login = (props) => {
           </Box>
         </form>
       </div>
-      {isErrorShown && <ErrorSnackbar errorMessage={error} setIsErrorShown={setIsErrorShown}/>}
+      {isErrorShown && <ErrorSnackbar errorMessage={error} setIsErrorShown={setIsErrorShown} />}
     </Container>
   )
 }
