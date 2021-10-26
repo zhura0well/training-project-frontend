@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import { postData } from '../../requests'
 import ErrorSnackbar from '../../components/error-snackbar'
 import { useHistory } from 'react-router'
-import Spinner from '../../components/spinner'
+import LoadingContainer from '../../components/loading-container'
 
 const Login = (props) => {
 
@@ -63,54 +63,56 @@ const Login = (props) => {
 
   return (
     <Container component='main' maxWidth='xs'>
-      {loading && <Spinner />}
-      {!loading && <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component='h1' variant='h5'>
-          {props.isRegistered ? 'Sign in' : 'Sign up'}
-        </Typography>
-        <form className={classes.form}>
-          <TextField
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            variant='outlined'
-            margin='normal'
-            required
-            fullWidth
-            label='Username'
-            autoFocus
-          />
-          <TextField
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            variant='outlined'
-            margin='normal'
-            required
-            fullWidth
-            label='Password'
-            type='password'
-            autoComplete='current-password'
-          />
-          <Button
-            fullWidth
-            variant='contained'
-            color='primary'
-            onClick={login}
-            className={classes.submit}
-          >
-            {props.isRegistered ? 'Sign in' : 'Sign up'}
-          </Button>
+      <LoadingContainer loading={loading}>
 
-          <Box align='center'>
-            <Link href='/register' variant='body2'>
-              {props.isRegistered && 'Don`t have an account? Sign Up'}
-            </Link>
-          </Box>
-        </form>
-      </div>
-      }
+        <div className={classes.paper}>
+          <Avatar className={classes.avatar}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component='h1' variant='h5'>
+            {props.isRegistered ? 'Sign in' : 'Sign up'}
+          </Typography>
+          <form className={classes.form}>
+            <TextField
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              variant='outlined'
+              margin='normal'
+              required
+              fullWidth
+              label='Username'
+              autoFocus
+            />
+            <TextField
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              variant='outlined'
+              margin='normal'
+              required
+              fullWidth
+              label='Password'
+              type='password'
+              autoComplete='current-password'
+            />
+            <Button
+              fullWidth
+              variant='contained'
+              color='primary'
+              onClick={login}
+              className={classes.submit}
+            >
+              {props.isRegistered ? 'Sign in' : 'Sign up'}
+            </Button>
+
+            <Box align='center'>
+              <Link href='/register' variant='body2'>
+                {props.isRegistered && 'Don`t have an account? Sign Up'}
+              </Link>
+            </Box>
+          </form>
+        </div>
+
+      </LoadingContainer>
       {isErrorShown && <ErrorSnackbar errorMessage={error} setIsErrorShown={setIsErrorShown} />}
     </Container>
   )

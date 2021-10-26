@@ -7,7 +7,7 @@ import ErrorSnackbar from '../../components/error-snackbar'
 import { useDispatch } from 'react-redux'
 import { addToCart } from '../../redux/reducers/cartReducer'
 import SuccessSnackbar from '../../components/success-snackbar'
-import Spinner from '../../components/spinner'
+import LoadingContainer from '../../components/loading-container'
 
 const ProductInfo = () => {
 
@@ -50,8 +50,8 @@ const ProductInfo = () => {
 
   return (
     <Container>
-      {loading && <Spinner />}
-      {!loading &&
+      <LoadingContainer loading={loading}>
+
         <Box display='flex' justifyContent='space-between' alignItems='center'>
           <Box mx={5}>
             <Box mb={4}>
@@ -87,7 +87,7 @@ const ProductInfo = () => {
 
           </Box>
         </Box>
-      }
+      </LoadingContainer>
       {isErrorShown && <ErrorSnackbar errorMessage={error} setIsErrorShown={setIsErrorShown} />}
       {isMessageShown && <SuccessSnackbar successMessage={successMessage} setIsMessageShown={setIsMessageShown} />}
     </Container>
