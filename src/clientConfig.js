@@ -4,4 +4,4 @@ export const ROLE = {
   MODER: 'MODER'
 }
 
-export const backendUrl = 'http://localhost:5000'
+export const backendUrl = 'https://shop-training-project-backend.herokuapp.com'
