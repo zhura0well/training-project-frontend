@@ -8,7 +8,7 @@ import { Add, Remove } from '@material-ui/icons'
 import SuccessSnackbar from '../success-snackbar'
 import imagePlaceholder from '../../assets/image-placeholder.jpg'
 import { useHistory } from 'react-router-dom'
-import { ROLE } from '../../clientConfig'
+import { backendUrl, ROLE } from '../../clientConfig'
 
 const ProductCard = ({ item, inCart }) => {
 
@@ -29,8 +29,9 @@ const ProductCard = ({ item, inCart }) => {
   return (
     <Card className='card-container'>
       <CardMedia
+        className='card-img'
         component='img'
-        image={item.image || imagePlaceholder}
+        image={item.imageKey ? `${backendUrl}/api/images/${item.imageKey}` : imagePlaceholder}
         alt='card image'
       />
       <CardContent>
@@ -115,7 +116,7 @@ ProductCard.propTypes = {
     _id: PropTypes.string,
     title: PropTypes.string,
     description: PropTypes.string,
-    image: PropTypes.string,
+    imageKey: PropTypes.string,
     price: PropTypes.number,
     quantity: PropTypes.number
   }),
