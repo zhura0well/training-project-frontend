@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux'
 import { addToCart } from '../../redux/reducers/cartReducer'
 import SuccessSnackbar from '../../components/success-snackbar'
 import LoadingContainer from '../../components/loading-container'
+import { backendUrl } from '../../clientConfig'
 
 const ProductInfo = () => {
 
@@ -19,7 +20,8 @@ const ProductInfo = () => {
   const [product, setProduct] = useState({
     title: '',
     description: '',
-    price: 0
+    price: 0,
+    imageKey: ''
   })
 
   const [successMessage, setSuccessMessage] = useState('')
@@ -59,8 +61,10 @@ const ProductInfo = () => {
                 {product.title}
               </Typography>
             </Box>
-
-            <img src={imagePlaceholder} alt="product" width='500px' />
+            <img src={product.imageKey ? `${backendUrl}/api/images/${product.imageKey}` : imagePlaceholder}
+              alt="product"
+              width='500px'
+              style={{ objectFit: 'contain' }} />
 
             <Box mt={4}>
               <Typography variant='h5' align='center'>
@@ -70,6 +74,7 @@ const ProductInfo = () => {
           </Box>
 
           <Box mx={5}>
+
 
             <Typography variant='h4'>
               {product.description}

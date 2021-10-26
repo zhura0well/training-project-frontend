@@ -2,10 +2,14 @@ import React from 'react'
 import { Box, AppBar, Toolbar, IconButton, Container } from '@material-ui/core'
 import { Menu, ShoppingCart } from '@material-ui/icons'
 import PropTypes from 'prop-types'
-import { NavLink } from 'react-router-dom'
+import { NavLink} from 'react-router-dom'
 import './styles.scss'
-const Header = ({ isAuthorized }) => {
+import { ROLE } from '../../clientConfig'
+const Header = ({ roles }) => {
 
+  const logout = async() => {
+    localStorage.removeItem('roles')
+  }
 
   return (
     <header>
@@ -25,15 +29,27 @@ const Header = ({ isAuthorized }) => {
             <NavLink className='link' activeClassName='link-active' exact to='/'>
               Home
             </NavLink>
+            <NavLink className='link' activeClassName='link-active' exact to='/about'>
+              About us?
+            </NavLink>
+            {roles.includes(ROLE.MODER) &&
             <NavLink className='link' activeClassName='link-active' exact to='/add-item'>
               Add item
-            </NavLink>
-            <NavLink className='link' activeClassName='link-active' exact to='/admin/all-users'>
-              Admin
-            </NavLink>
-            <NavLink exact to='/login' className='link' activeClassName='link-active'>
-              {!isAuthorized ? 'Login' : 'Logout'}
-            </NavLink>
+            </NavLink>}
+            {roles.includes(ROLE.ADMIN) &&
+              <NavLink className='link' activeClassName='link-active' exact to='/admin/all-users'>
+                Admin
+              </NavLink>}
+
+            {!roles ?
+              <NavLink exact to='/login' className='link' activeClassName='link-active'>
+                Login
+              </NavLink> :
+              <a className='link' href='/' onClick={logout}>
+                Logout
+              </a>
+            }
+
             <NavLink exact to='/cart' className='link' activeClassName='link-active'>
               <IconButton
                 size='medium'
@@ -51,6 +67,6 @@ const Header = ({ isAuthorized }) => {
     </header>)
 }
 
-Header.propTypes = { isAuthorized: PropTypes.string }
+Header.propTypes = { roles: PropTypes.string }
 
 export default Header
