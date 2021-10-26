@@ -21,13 +21,7 @@ const Cart = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const placeOrder = () => {
-    // setOrderData({ cart: { items, totalPrice } })
-    setOrderData({
-      cart: {
-        items: items.map(item => ({ _id: item._id, quantity: item.quantity })),
-        totalPrice
-      }
-    })
+    setOrderData({ cart: { items, totalPrice } })
     setIsModalOpen(true)
   }
   return (
