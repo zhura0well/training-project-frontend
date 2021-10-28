@@ -6,7 +6,7 @@ import { ArrowBackIos, ArrowForwardIos } from '@material-ui/icons'
 const CustomCarousel = ({ items }) => {
 
   return (
-    <Box mb={10}>
+    <Box mb={7}>
       <Carousel
         NextIcon={<ArrowForwardIos />}
         PrevIcon={<ArrowBackIos />}
