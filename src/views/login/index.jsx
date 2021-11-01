@@ -7,6 +7,7 @@ import ErrorSnackbar from '../../components/error-snackbar'
 import { useHistory } from 'react-router'
 import { useDispatch } from 'react-redux'
 import { addToCart } from '../../redux/reducers/cartReducer'
+import LoadingContainer from '../../components/loading-container'
 
 const Login = (props) => {
 
@@ -33,7 +34,6 @@ const Login = (props) => {
 
   //Logic
   const history = useHistory()
-
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
@@ -41,83 +41,93 @@ const Login = (props) => {
   const [isErrorShown, setIsErrorShown] = useState(false)
 
   const dispatch = useDispatch()
+  const [loading, setLoading] = useState(false)
 
 
   const login = async () => {
+    setLoading(true)
     const url = props.isRegistered ? '/api/login' : '/api/register'
 
     postData(url, { username, password })
       .then(response => {
         localStorage.setItem('roles', response.roles)
         localStorage.setItem('userId', response._id)
+        history.push('/')
       })
       .then(() => {
         const id = localStorage.getItem('userId')
         getData(`/api/shoppingCart/${id}`)
           .then(response => {
             const cartItems = response.items
-            for(let i = 0; i < cartItems.length; i++) {
+            for (let i = 0; i < cartItems.length; i++) {
               dispatch(addToCart({ _id: cartItems[i]._id, quantity: cartItems[i].quantity }))
             }
           })
         setUsername('')
         setPassword('')
-        history.replace('/')
       })
       .catch(e => {
         setError(e.statusText)
         setIsErrorShown(true)
       })
+      .finally(() => setTimeout(() => {
+        window.location.reload()
+        setLoading(false)
+      }, 1000))
   }
 
   return (
     <Container component='main' maxWidth='xs'>
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component='h1' variant='h5'>
-          {props.isRegistered ? 'Sign in' : 'Sign up'}
-        </Typography>
-        <form className={classes.form}>
-          <TextField
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            variant='outlined'
-            margin='normal'
-            required
-            fullWidth
-            label='Username'
-            autoFocus
-          />
-          <TextField
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            variant='outlined'
-            margin='normal'
-            required
-            fullWidth
-            label='Password'
-            type='password'
-            autoComplete='current-password'
-          />
-          <Button
-            fullWidth
-            variant='contained'
-            color='primary'
-            onClick={login}
-            className={classes.submit}
-          >
-            {props.isRegistered ? 'Sign in' : 'Sign up'}
-          </Button>
+      <LoadingContainer loading={loading}>
 
-          <Box align='center'>
-            <Link href='/register' variant='body2'>
-              {props.isRegistered && 'Don`t have an account? Sign Up'}
-            </Link>
-          </Box>
-        </form>
-      </div>
+        <div className={classes.paper}>
+          <Avatar className={classes.avatar}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component='h1' variant='h5'>
+            {props.isRegistered ? 'Sign in' : 'Sign up'}
+          </Typography>
+          <form className={classes.form}>
+            <TextField
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              variant='outlined'
+              margin='normal'
+              required
+              fullWidth
+              label='Username'
+              autoFocus
+            />
+            <TextField
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              variant='outlined'
+              margin='normal'
+              required
+              fullWidth
+              label='Password'
+              type='password'
+              autoComplete='current-password'
+            />
+            <Button
+              fullWidth
+              variant='contained'
+              color='primary'
+              onClick={login}
+              className={classes.submit}
+            >
+              {props.isRegistered ? 'Sign in' : 'Sign up'}
+            </Button>
+
+            <Box align='center'>
+              <Link href='/register' variant='body2'>
+                {props.isRegistered && 'Don`t have an account? Sign Up'}
+              </Link>
+            </Box>
+          </form>
+        </div>
+
+      </LoadingContainer>
       {isErrorShown && <ErrorSnackbar errorMessage={error} setIsErrorShown={setIsErrorShown} />}
     </Container>
   )

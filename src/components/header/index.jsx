@@ -1,16 +1,18 @@
 import React from 'react'
-import { Box, AppBar, Toolbar, IconButton, Container, Button } from '@material-ui/core'
+import { Box, AppBar, Toolbar, IconButton, Container } from '@material-ui/core'
 import { Menu, ShoppingCart } from '@material-ui/icons'
 import PropTypes from 'prop-types'
-import { NavLink } from 'react-router-dom'
+import { NavLink, Link, useHistory } from 'react-router-dom'
 import './styles.scss'
 import { putData } from '../../requests'
 import { useSelector } from 'react-redux'
-const Header = ({ isAuthorized }) => {
+import { ROLE } from '../../clientConfig'
+
+const Header = ({ roles }) => {
 
   const items = useSelector(state => state.cart.addedItems)
   const totalPrice = useSelector(state => state.cart.totalPrice)
-
+  const history = useHistory()
   const logout = () => {
     const userId = localStorage.getItem('userId')
     localStorage.clear()
@@ -21,6 +23,8 @@ const Header = ({ isAuthorized }) => {
         totalPrice
       }
     })
+      .then(() => history.push('/'))
+      .finally(() => window.location.reload())
   }
 
   return (
@@ -41,18 +45,27 @@ const Header = ({ isAuthorized }) => {
             <NavLink className='link' activeClassName='link-active' exact to='/'>
               Home
             </NavLink>
-            <NavLink className='link' activeClassName='link-active' exact to='/add-item'>
-              Add item
+            <NavLink className='link' activeClassName='link-active' exact to='/about'>
+              About us?
             </NavLink>
-            <NavLink className='link' activeClassName='link-active' exact to='/admin/all-users'>
-              Admin
-            </NavLink>
-            <NavLink exact to='/login' className='link' activeClassName='link-active'>
-              {!isAuthorized ? 'Login' : 'Logout'}
-            </NavLink>
-            <Button onClick={logout}>
-              Logout
-            </Button>
+            {roles.includes(ROLE.MODER) &&
+              <NavLink className='link' activeClassName='link-active' exact to='/add-item'>
+                Add item
+              </NavLink>}
+
+            {roles.includes(ROLE.ADMIN) &&
+              <Link className='link' activeClassName='link-active' exact to='/admin/all-users'>
+                Admin
+              </Link>}
+
+            {!roles ?
+              <NavLink exact to='/login' className='link' activeClassName='link-active'>
+                Login
+              </NavLink> :
+              <Link className='link'  onClick={logout}>
+                Logout
+              </Link>
+            }
 
             <NavLink exact to='/cart' className='link' activeClassName='link-active'>
               <IconButton
@@ -71,6 +84,6 @@ const Header = ({ isAuthorized }) => {
     </header>)
 }
 
-Header.propTypes = { isAuthorized: PropTypes.string }
+Header.propTypes = { roles: PropTypes.string }
 
 export default Header

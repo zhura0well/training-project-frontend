@@ -13,14 +13,14 @@ let persistor = persistStore(store)
 
 function App() {
 
-  const isAuthorized = document.cookie.replace(/(?:(?:^|.*;\s*)isAuthorized\s*=\s*([^;]*).*$)|^.*$/, "$1")
+  const roles = localStorage.getItem('roles') || ''
 
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <BrowserRouter>
           <div className='app-wrapper'>
-            <Header isAuthorized={isAuthorized} />
+            <Header roles={roles} />
             <div className='app-content'>
               <Router />
             </div>
