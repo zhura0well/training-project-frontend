@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { getData } from '../../requests'
 import { setItems } from '../../redux/reducers/cartReducer'
 import ErrorSnackbar from '../../components/error-snackbar'
+import LoadingContainer from '../../components/loading-container'
 import CustomCarousel from '../../components/custom-carousel'
 import firstImage from '../../assets/slider-1.jpg'
 import secondImage from '../../assets/slider-2.jpg'
@@ -17,8 +18,10 @@ const Home = () => {
   const [error, setError] = useState('')
   const [isErrorShown, setIsErrorShown] = useState(false)
 
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
+    setLoading(true)
     getData('/api/products')
       .then(response => {
         dispatch(setItems({ items: response }))
@@ -27,6 +30,7 @@ const Home = () => {
         setError(e.statusText)
         setIsErrorShown(true)
       })
+      .finally(() => setTimeout(() => setLoading(false), 1000))
   }, [])
 
   const items = useSelector(state => state.cart.items)
@@ -34,18 +38,21 @@ const Home = () => {
 
   return (
     <Container>
-      <CustomCarousel items={images}/>
-      <Grid spacing={10} container>
+      <LoadingContainer loading={loading}>
+        <CustomCarousel items={images} />
+        <Grid spacing={10} container>
 
-        {items.map((item, index) => {
-          return (
-            <Grid item key={index}>
-              <ProductCard item={item} />
-            </Grid>
-          )
-        }
-        )}
-      </Grid>
+          {items.map((item, index) => {
+            return (
+              <Grid item key={index}>
+                <ProductCard item={item} />
+              </Grid>
+            )
+          }
+          )}
+        </Grid>
+      </LoadingContainer>
+
       {isErrorShown && <ErrorSnackbar errorMessage={error} setIsErrorShown={setIsErrorShown} />}
     </Container>
   )
