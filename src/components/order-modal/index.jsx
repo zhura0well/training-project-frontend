@@ -5,8 +5,7 @@ import React, { useState } from 'react'
 import { postData } from '../../requests'
 import ErrorSnackbar from '../error-snackbar'
 import SuccessSnackbar from '../success-snackbar'
-
-const OrderModal = ({ isModalOpen, setIsModalOpen, orderData, setOrderData }) => {
+const OrderModal = ({ isModalOpen, setIsModalOpen, orderData, setOrderData, setLoading }) => {
 
 
   const [error, setError] = useState('')
@@ -46,14 +45,22 @@ const OrderModal = ({ isModalOpen, setIsModalOpen, orderData, setOrderData }) =>
         })
 
         localStorage.removeItem('persist:root')
-
-        setSuccessMessage('Order created!')
+        setSuccessMessage('Order created! Page will reload now.')
         setIsMessageShown(true)
+        setIsModalOpen(false)
       })
-      .then(() => setTimeout(() => window.location.reload(), 3000))
+      .then(() => {
+        setTimeout(() => {
+          setLoading(true)
+          window.location.reload()
+        }, 5000)
+      })
       .catch(e => {
         setError(e.statusText)
         setIsErrorShown(true)
+      })
+      .finally(() => {
+        setLoading(false)
       })
   }
   return (
@@ -126,7 +133,8 @@ OrderModal.propTypes = {
     email: PropTypes.string,
     phone: PropTypes.number,
   }),
-  setOrderData: PropTypes.func
+  setOrderData: PropTypes.func,
+  setLoading: PropTypes.func,
 
 }
 export default OrderModal
