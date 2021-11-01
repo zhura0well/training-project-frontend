@@ -28,7 +28,8 @@
     "dev": "react-scripts start",
     "start": "serve -s build",
     "build": "react-scripts build",
-    "heroku-postbuild": "yarn run build"
+    "heroku-postbuild": "yarn run build",
+    "test": "react-scripts test"
   },
   "eslintConfig": {
     "extends": [
