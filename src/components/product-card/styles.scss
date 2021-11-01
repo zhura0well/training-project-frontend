@@ -1,5 +1,9 @@
 .card-container{
-  max-width: 350px;
+  width: 350px;
+
+  .card-img{
+    max-height: 200px;
+  }
   .card-title-section{
     display: flex;
     justify-content: space-between;
