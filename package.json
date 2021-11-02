@@ -10,6 +10,7 @@
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
+    "enzyme": "^3.11.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-plugin-react": "7.21.5",
     "node-sass": "4.14.1",
@@ -29,7 +30,7 @@
     "start": "serve -s build",
     "build": "react-scripts build",
     "heroku-postbuild": "yarn run build",
-    "test": "react-scripts test"
+    "test": "react-scripts test --coverage"
   },
   "eslintConfig": {
     "extends": [
@@ -48,5 +49,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "enzyme-adapter-react-16": "^1.15.6"
   }
 }

@@ -32,11 +32,11 @@ const Header = ({ roles }) => {
             <NavLink className='link' activeClassName='link-active' exact to='/about'>
               About us?
             </NavLink>
-            {roles.includes(ROLE.MODER) &&
+            {roles && roles.includes(ROLE.MODER) &&
             <NavLink className='link' activeClassName='link-active' exact to='/add-item'>
               Add item
             </NavLink>}
-            {roles.includes(ROLE.ADMIN) &&
+            {roles && roles.includes(ROLE.ADMIN) &&
               <NavLink className='link' activeClassName='link-active' exact to='/admin/all-users'>
                 Admin
               </NavLink>}

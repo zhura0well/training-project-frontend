@@ -57,6 +57,7 @@ const ProductCard = ({ item, inCart }) => {
                 edge='start'
                 color='inherit'
                 sx={{ mr: 2 }}
+                data-testid='plus'
                 onClick={() => dispatch(addQuantity({ _id: item._id }))}
               >
                 <Add />
@@ -70,6 +71,7 @@ const ProductCard = ({ item, inCart }) => {
                 edge='start'
                 color='inherit'
                 sx={{ mr: 2 }}
+                data-testid='minus'
                 onClick={() => dispatch(subQuantity({ _id: item._id }))}>
                 <Remove />
               </IconButton>

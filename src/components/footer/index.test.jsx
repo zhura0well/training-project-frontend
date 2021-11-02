@@ -1,3 +1,4 @@
+import React from 'react'
 import { render, screen } from '@testing-library/react'
 import Footer from '.'
 
@@ -5,7 +6,7 @@ import Footer from '.'
 describe('Footer tests', () => {
 
   it('Renders with correct year', () => {
-    render(<Footer/>)
+    render(<Footer />)
     expect(screen.getByText(/2021/)).toBeInTheDocument()
   })
 })

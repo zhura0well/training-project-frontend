@@ -1,20 +1,18 @@
 import React from 'react'
 import { render, screen } from '@testing-library/react'
-import ErrorSnackbar from '.'
+import SuccessSnackbar from '.'
 
-
-describe('Error snackbar tests', () => {
+describe('Succes snackbar tests', () => {
 
 
   it('Renders without text prop', () => {
-    render(<ErrorSnackbar />)
+    render(<SuccessSnackbar />)
 
     expect(screen.getByRole('alert')).toBeInTheDocument()
-    expect(screen.getByText(/wrong/i)).toBeInTheDocument()
   })
 
   it('Renders with text prop', () => {
-    render(<ErrorSnackbar errorMessage={'Testing'} />)
+    render(<SuccessSnackbar successMessage={'Testing'} />)
 
     expect(screen.getByText(/testing/i)).toBeInTheDocument()
   })
