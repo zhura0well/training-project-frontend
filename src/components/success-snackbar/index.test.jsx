@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, screen } from '@testing-library/react'
+import { render, screen, fireEvent } from '@testing-library/react'
 import SuccessSnackbar from '.'
 
 describe('Succes snackbar tests', () => {
@@ -15,5 +15,13 @@ describe('Succes snackbar tests', () => {
     render(<SuccessSnackbar successMessage={'Testing'} />)
 
     expect(screen.getByText(/testing/i)).toBeInTheDocument()
+  })
+
+  it('Tests onClose function when user clicks on a cross icon', () => {
+    const setShown = jest.fn()
+    render(<SuccessSnackbar successMessage={'Testing'} setIsMessageShown={setShown} />)
+    fireEvent.click(screen.getByRole('button'))
+    expect(setShown).toHaveBeenCalled()
+
   })
 })
