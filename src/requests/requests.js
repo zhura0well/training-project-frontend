@@ -1,4 +1,4 @@
-import { backendUrl } from './clientConfig'
+import { backendUrl } from '../clientConfig'
 
 export const getData = async (url) => {
   const response = await fetch(`${backendUrl}${url}`, {

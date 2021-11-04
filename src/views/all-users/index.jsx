@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Container, Box, Typography, Divider } from '@material-ui/core'
-import { getData } from '../../requests'
+import { getData } from '../../requests/requests'
 import LinearUserInfo from '../../components/linear-user-info'
 import { setUsers } from '../../redux/reducers/allUsersReducer'
 import ErrorSnackbar from '../../components/error-snackbar'

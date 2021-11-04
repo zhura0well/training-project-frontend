@@ -5,12 +5,10 @@ import { ROLE } from '../clientConfig'
 /*can't import from config.js
  relative imports outside of src/ are not supported*/
 
-import Admin from '../views/admin'
 import AllUsers from '../views/all-users'
 import Cart from '../views/cart'
 import Home from '../views/home'
 import Login from '../views/login'
-import Moder from '../views/moder'
 import NotFoundPage from '../views/not-found-page'
 import ProductInfo from '../views/product-info'
 import UserInfo from '../views/user-info'
@@ -18,18 +16,24 @@ import AddItem from '../views/add-item'
 
 function Router() {
 
+  const noAuthRouts = [
+    { path: '/login', component: <Login isRegistered={true} /> },
+    { path: '/register', component: <Login isRegistered={false} /> },
+    { path: '/cart', component: <Cart /> },
+    { path: '/product-info/:id', component: <ProductInfo /> },
+    { path: '/', component: <Home /> },
+  ]
+
   const userRouts = [
     { path: '/user', component: <Home /> },
   ]
 
   const moderRouts = [
-    { path: '/moder', component: <Moder /> },
-    { path: '/add-item', component: <AddItem />},
-    { path: '/add-item/:id', component: <AddItem isEditable={true}/>}
+    { path: '/add-item', component: <AddItem /> },
+    { path: '/add-item/:id', component: <AddItem isEditable={true} /> }
   ]
 
   const adminRouts = [
-    { path: '/admin', component: <Admin /> },
     { path: '/admin/all-users', component: <AllUsers /> },
     { path: '/admin/user-info/:id', component: <UserInfo /> }
   ]
@@ -38,25 +42,13 @@ function Router() {
 
   return (
     <Switch>
-      <Route path='/login'>
-        <Login isRegistered={true} />
-      </Route>
 
-      <Route path='/register'>
-        <Login isRegistered={false} />
-      </Route>
-
-      <Route path='/cart'>
-        <Cart />
-      </Route>
-
-      <Route path='/product-info/:id'>
-        <ProductInfo />
-      </Route>
-
-      <Route exact path='/'>
-        <Home />
-      </Route>
+      {
+        noAuthRouts.map((route, index) => (
+          <Route exact path={route.path} key={index}>
+            {route.component}
+          </Route>
+        ))}
 
       {
         roles.includes(ROLE.USER) &&
