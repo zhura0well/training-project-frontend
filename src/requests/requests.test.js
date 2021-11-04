@@ -17,11 +17,9 @@ describe('Requests tests', () => {
 
   it('Post request is done correctly', async () => {
     const response = await postData('/api/products', product)
-    // const failedResponse = await postData('/api/productss', product)
+
     product._id = response._id
     expect(response.title).toBe(product.title)
-    // console.log(failedResponse)
-    // expect(failedResponse.status).toBe(400)
   })
 
   it('Get request is done correctly', async () => {
@@ -36,7 +34,7 @@ describe('Requests tests', () => {
     expect(response.title).toBe(product.title)
   })
 
-  
+
   it('Delete request is done correctly', async () => {
 
     const response = await deleteData(`/api/products/${product._id}`)
