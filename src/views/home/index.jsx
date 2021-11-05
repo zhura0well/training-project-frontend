@@ -40,7 +40,7 @@ const Home = () => {
     <Container>
       <LoadingContainer loading={loading}>
         <CustomCarousel items={images} />
-        <Grid spacing={10} container>
+        <Grid data-testid='grid' spacing={10} container>
 
           {items.map((item, index) => {
             return (

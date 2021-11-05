@@ -82,6 +82,7 @@ const Login = (props) => {
               margin='normal'
               required
               fullWidth
+              inputProps={{ 'data-testid': 'username' }}
               label='Username'
               autoFocus
             />
@@ -93,6 +94,7 @@ const Login = (props) => {
               required
               fullWidth
               label='Password'
+              inputProps={{ 'data-testid': 'password' }}
               type='password'
               autoComplete='current-password'
             />

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Container, Typography, Box, TextField, Button, Input, IconButton } from '@material-ui/core'
-import { deleteData, getData, postData, putData, putImage } from '../../requests'
+import { deleteData, getData, postData, putData, putImage } from '../../requests/requests'
 import ErrorSnackbar from '../../components/error-snackbar'
 import SuccessSnackbar from '../../components/success-snackbar'
 import { PropTypes } from 'prop-types'
@@ -135,7 +135,7 @@ const AddItem = ({ isEditable }) => {
                   </IconButton>
                 </label>
 
-                <Box onClick={() => resetImg()}>
+                <Box onClick={() => resetImg()} data-testid='resetImg'>
                   <IconButton color="primary" aria-label="upload picture" component="span">
                     <Clear fontSize='large' />
                   </IconButton>
@@ -159,6 +159,7 @@ const AddItem = ({ isEditable }) => {
                     variant='filled'
                     helperText='Please enter discount title'
                     label='Title'
+                    inputProps={{ 'data-testid': 'title' }}
                     required
                     autoFocus
                   />
@@ -172,6 +173,7 @@ const AddItem = ({ isEditable }) => {
                     onChange={(e) => setItem({ ...item, price: e.target.value })}
                     variant='filled'
                     required
+                    inputProps={{ 'data-testid': 'price' }}
                     helperText='Please enter price (for 1 item in $)'
                     label='Price'
                   />
@@ -187,6 +189,7 @@ const AddItem = ({ isEditable }) => {
                   variant='outlined'
                   required
                   fullWidth
+                  inputProps={{ 'data-testid': 'desc'}}
                   helperText='Please enter description (full) '
                   label='Description'
                 />
@@ -209,6 +212,7 @@ const AddItem = ({ isEditable }) => {
               variant='contained'
               onClick={reset}
               size='large'
+              data-testid='resetBtn'
             >
               Reset
             </Button>
