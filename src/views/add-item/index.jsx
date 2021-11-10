@@ -68,7 +68,7 @@ const AddItem = ({ isEditable }) => {
 
   const addItem = () => {
     postData(`/api/products`, item)
-      .then(response => putImage(`/api/images/${response._id}`, image))
+      .then(response => image && putImage(`/api/images/${response._id}`, image))
       .then(() => {
         setSuccessMessage('Successfully added!')
         setIsMessageShown(true)

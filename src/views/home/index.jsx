@@ -3,8 +3,9 @@ import { Container, Grid, Box } from '@material-ui/core'
 import ProductCard from '../../components/product-card'
 import { useSelector, useDispatch } from 'react-redux'
 import { getData } from '../../requests'
-import {  searchItems, setItems, sortItems } from '../../redux/reducers/cartReducer'
+import { searchItems, setItems, sortItems } from '../../redux/reducers/cartReducer'
 import ErrorSnackbar from '../../components/error-snackbar'
+import LoadingContainer from '../../components/loading-container'
 import CustomCarousel from '../../components/custom-carousel'
 import firstImage from '../../assets/slider-1.jpg'
 import secondImage from '../../assets/slider-2.jpg'
@@ -21,8 +22,10 @@ const Home = () => {
   const [sortType, setSortType] = useState('')
   const [searchText, setSearchText] = useState('')
 
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
+    setLoading(true)
     getData('/api/products')
       .then(response => {
         dispatch(setItems({ items: response }))
@@ -31,6 +34,7 @@ const Home = () => {
         setError(e.statusText)
         setIsErrorShown(true)
       })
+      .finally(() => setTimeout(() => setLoading(false), 1000))
   }, [])
 
   useEffect(() => {
@@ -38,7 +42,7 @@ const Home = () => {
   }, [sortType])
 
   useEffect(() => {
-    dispatch(searchItems({ searchText: searchText.trim()}))
+    dispatch(searchItems({ searchText: searchText.trim() }))
     dispatch(sortItems({ sortType }))
   }, [searchText])
 
@@ -46,23 +50,25 @@ const Home = () => {
   const images = [firstImage, secondImage, thirdImage]
   return (
     <Container>
-      <CustomCarousel items={images} />
-      <Box display='flex' justifyContent='space-evenly' mb={6}>
-        <SearchBar setSearchText={setSearchText} />
-        <SortSelect setSortType={setSortType} />
-      </Box>
+      <LoadingContainer loading={loading}>
+        <CustomCarousel items={images} />
+        <Box display='flex' justifyContent='space-evenly' mb={6}>
+          <SearchBar setSearchText={setSearchText} />
+          <SortSelect setSortType={setSortType} />
+        </Box>
+        <Grid spacing={10} container>
 
-      <Grid spacing={10} container>
+          {items && items.map((item, index) => {
+            return (
+              <Grid item key={index}>
+                <ProductCard item={item} />
+              </Grid>
+            )
+          }
+          )}
+        </Grid>
+      </LoadingContainer>
 
-        {items.map((item, index) => {
-          return (
-            <Grid item key={index}>
-              <ProductCard item={item} />
-            </Grid>
-          )
-        }
-        )}
-      </Grid>
       {isErrorShown && <ErrorSnackbar errorMessage={error} setIsErrorShown={setIsErrorShown} />}
     </Container>
   )

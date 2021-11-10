@@ -1,11 +1,12 @@
-import { Box, CircularProgress } from '@material-ui/core'
+
 import React from 'react'
+import './styles.scss'
 
 const Spinner = () => {
   return (
-    <Box sx={{ display: 'flex' }}>
-      <CircularProgress />
-    </Box>
+    <div className='spinner-container'>
+      <div className="lds-hourglass"></div>
+    </div>
   )
 }
 
