@@ -2,13 +2,29 @@ import React from 'react'
 import { Box, AppBar, Toolbar, IconButton, Container } from '@material-ui/core'
 import { Menu, ShoppingCart } from '@material-ui/icons'
 import PropTypes from 'prop-types'
-import { NavLink} from 'react-router-dom'
+import { NavLink, Link, useHistory } from 'react-router-dom'
 import './styles.scss'
+import { putData } from '../../requests'
+import { useSelector } from 'react-redux'
 import { ROLE } from '../../clientConfig'
+
 const Header = ({ roles }) => {
 
-  const logout = async() => {
-    localStorage.removeItem('roles')
+  const items = useSelector(state => state.cart.addedItems)
+  const totalPrice = useSelector(state => state.cart.totalPrice)
+  const history = useHistory()
+  const logout = () => {
+    const userId = localStorage.getItem('userId')
+    localStorage.clear()
+
+    putData(`/api/shoppingCart/${userId}`, {
+      cart: {
+        items,
+        totalPrice
+      }
+    })
+      .then(() => history.push('/'))
+      .finally(() => window.location.reload())
   }
 
   return (
@@ -33,21 +49,22 @@ const Header = ({ roles }) => {
               About us?
             </NavLink>
             {roles.includes(ROLE.MODER) &&
-            <NavLink className='link' activeClassName='link-active' exact to='/add-item'>
-              Add item
-            </NavLink>}
-            {roles.includes(ROLE.ADMIN) &&
-              <NavLink className='link' activeClassName='link-active' exact to='/admin/all-users'>
-                Admin
+              <NavLink className='link' activeClassName='link-active' exact to='/add-item'>
+                Add item
               </NavLink>}
+
+            {roles.includes(ROLE.ADMIN) &&
+              <Link className='link' activeClassName='link-active' exact to='/admin/all-users'>
+                Admin
+              </Link>}
 
             {!roles ?
               <NavLink exact to='/login' className='link' activeClassName='link-active'>
                 Login
               </NavLink> :
-              <a className='link' href='/' onClick={logout}>
+              <Link className='link'  onClick={logout}>
                 Logout
-              </a>
+              </Link>
             }
 
             <NavLink exact to='/cart' className='link' activeClassName='link-active'>
