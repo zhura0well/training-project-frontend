@@ -3,6 +3,8 @@ import { render, screen, fireEvent } from '@testing-library/react'
 import { BrowserRouter } from 'react-router-dom'
 import Header from '.'
 import { ROLE } from '../../clientConfig'
+import { Provider } from 'react-redux'
+import store from '../../redux/store'
 
 
 describe('Header tests', () => {
@@ -11,7 +13,10 @@ describe('Header tests', () => {
   it('Renders correct text for admin', () => {
     render(
       <BrowserRouter>
-        <Header roles={ROLE.ADMIN} />
+        <Provider store={store}>
+          <Header roles={ROLE.ADMIN} />
+        </Provider>
+
       </BrowserRouter>
     )
 
@@ -22,7 +27,9 @@ describe('Header tests', () => {
   it('Renders correct text for moder', () => {
     render(
       <BrowserRouter>
-        <Header roles={ROLE.MODER} />
+        <Provider store={store}>
+          <Header roles={ROLE.MODER} />
+        </Provider>
       </BrowserRouter>
     )
 
@@ -33,7 +40,9 @@ describe('Header tests', () => {
   it('Renders correct text for user', () => {
     render(
       <BrowserRouter>
-        <Header roles={ROLE.USER} />
+        <Provider store={store}>
+          <Header roles={ROLE.USER} />
+        </Provider>
       </BrowserRouter>
     )
 
@@ -43,7 +52,9 @@ describe('Header tests', () => {
   it('Renders with empty string', () => {
     render(
       <BrowserRouter>
-        <Header roles='' />
+        <Provider store={store}>
+          <Header roles='' />
+        </Provider>
       </BrowserRouter>
     )
 
@@ -51,16 +62,19 @@ describe('Header tests', () => {
   })
 
   it('Tests logout function', () => {
-    jest.spyOn(window.localStorage.__proto__, 'removeItem')
-    window.localStorage.__proto__.removeItem = jest.fn()
+    jest.spyOn(window.localStorage.__proto__, 'clear')
+    window.localStorage.__proto__.clear = jest.fn()
 
     render(
       <BrowserRouter>
-        <Header roles={ROLE.ADMIN} />
+        <Provider store={store}>
+          <Header roles={ROLE.ADMIN} />
+        </Provider>
       </BrowserRouter>
     )
-    fireEvent.click(screen.getByRole('link', { name: 'Logout' }))
-    expect(window.localStorage.removeItem).toHaveBeenCalledTimes(1)
+
+    fireEvent.click(screen.getByText('Logout'))
+    expect(window.localStorage.clear).toHaveBeenCalledTimes(1)
 
   })
 

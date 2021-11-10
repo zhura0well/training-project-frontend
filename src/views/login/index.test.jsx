@@ -3,13 +3,16 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import Login from '.'
 import { BrowserRouter } from 'react-router-dom'
 import userEvent from '@testing-library/user-event'
-
+import { Provider } from 'react-redux'
+import store from '../../redux/store'
 describe('Login tests', () => {
 
   it('Renders properly when user is registered', () => {
     render(
       <BrowserRouter>
-        <Login isRegistered={true}/>
+        <Provider store={store}>
+          <Login isRegistered={true} />
+        </Provider>
       </BrowserRouter>
     )
 
@@ -19,7 +22,9 @@ describe('Login tests', () => {
   it('Renders properly when user isn`t registered', () => {
     render(
       <BrowserRouter>
-        <Login isRegistered={false}/>
+        <Provider store={store}>
+          <Login isRegistered={false} />
+        </Provider>
       </BrowserRouter>
     )
 
@@ -37,7 +42,9 @@ describe('Login tests', () => {
 
     render(
       <BrowserRouter>
-        <Login />
+        <Provider store={store}>
+          <Login />
+        </Provider>
       </BrowserRouter>
     )
 
@@ -48,15 +55,17 @@ describe('Login tests', () => {
 
   it('Tests login func', async () => {
 
-    const {container} = render(
+    const { container } = render(
       <BrowserRouter>
-        <Login isRegistered={true}/>
+        <Provider store={store}>
+          <Login isRegistered={true} />
+        </Provider>
       </BrowserRouter>
     )
 
     userEvent.type(screen.getByTestId('username'), 'user1')
     userEvent.type(screen.getByTestId('password'), 'userpass1')
-    fireEvent.click(screen.getByRole('button', {name: 'Sign in'}))
+    fireEvent.click(screen.getByRole('button', { name: 'Sign in' }))
 
     expect(container.getElementsByClassName('spinner-container')).toHaveLength(1)
 

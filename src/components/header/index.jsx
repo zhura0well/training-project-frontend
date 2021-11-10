@@ -2,13 +2,31 @@ import React from 'react'
 import { Box, AppBar, Toolbar, IconButton, Container } from '@material-ui/core'
 import { Menu, ShoppingCart } from '@material-ui/icons'
 import PropTypes from 'prop-types'
-import { NavLink} from 'react-router-dom'
+import { NavLink, useHistory } from 'react-router-dom'
 import './styles.scss'
+import { putData } from '../../requests/requests'
+import { useSelector, useDispatch } from 'react-redux'
 import { ROLE } from '../../clientConfig'
-const Header = ({ roles }) => {
+import { clearCart } from '../../redux/reducers/cartReducer'
 
-  const logout = async() => {
-    localStorage.removeItem('roles')
+const Header = ({ roles }) => {
+  const dispatch = useDispatch()
+  const items = useSelector(state => state.cart.addedItems)
+  const totalPrice = useSelector(state => state.cart.totalPrice)
+  const history = useHistory()
+  const logout = () => {
+    const userId = localStorage.getItem('userId')
+    localStorage.clear()
+    putData(`/api/shoppingCart/${userId}`, {
+      cart: {
+        items,
+        totalPrice
+      }
+    })
+      .then(() => {
+        dispatch(clearCart())
+        history.push('/')})
+      .finally(() => window.location.reload())
   }
 
   return (
@@ -32,11 +50,12 @@ const Header = ({ roles }) => {
             <NavLink className='link' activeClassName='link-active' exact to='/about'>
               About us?
             </NavLink>
-            {roles && roles.includes(ROLE.MODER) &&
-            <NavLink className='link' activeClassName='link-active' exact to='/add-item'>
-              Add item
-            </NavLink>}
-            {roles && roles.includes(ROLE.ADMIN) &&
+            {roles.includes(ROLE.MODER) &&
+              <NavLink className='link' activeClassName='link-active' exact to='/add-item'>
+                Add item
+              </NavLink>}
+
+            {roles.includes(ROLE.ADMIN) &&
               <NavLink className='link' activeClassName='link-active' exact to='/admin/all-users'>
                 Admin
               </NavLink>}
@@ -45,7 +64,7 @@ const Header = ({ roles }) => {
               <NavLink exact to='/login' className='link' activeClassName='link-active'>
                 Login
               </NavLink> :
-              <a className='link' href='/' onClick={logout}>
+              <a className='link' onClick={logout}>
                 Logout
               </a>
             }

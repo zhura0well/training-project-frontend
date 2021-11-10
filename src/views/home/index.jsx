@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react'
-import { Container, Grid } from '@material-ui/core'
+import { Container, Grid, Box } from '@material-ui/core'
 import ProductCard from '../../components/product-card'
 import { useSelector, useDispatch } from 'react-redux'
 import { getData } from '../../requests/requests'
-import { setItems } from '../../redux/reducers/cartReducer'
+import { searchItems, setItems, sortItems } from '../../redux/reducers/cartReducer'
 import ErrorSnackbar from '../../components/error-snackbar'
 import LoadingContainer from '../../components/loading-container'
 import CustomCarousel from '../../components/custom-carousel'
 import firstImage from '../../assets/slider-1.jpg'
 import secondImage from '../../assets/slider-2.jpg'
 import thirdImage from '../../assets/slider-3.jpg'
+import SortSelect from '../../components/sort-select'
+import SearchBar from '../../components/searchbar'
 
 const Home = () => {
 
@@ -17,6 +19,8 @@ const Home = () => {
 
   const [error, setError] = useState('')
   const [isErrorShown, setIsErrorShown] = useState(false)
+  const [sortType, setSortType] = useState('')
+  const [searchText, setSearchText] = useState('')
 
   const [loading, setLoading] = useState(false)
 
@@ -33,16 +37,28 @@ const Home = () => {
       .finally(() => setTimeout(() => setLoading(false), 1000))
   }, [])
 
-  const items = useSelector(state => state.cart.items)
-  const images = [firstImage, secondImage, thirdImage]
+  useEffect(() => {
+    dispatch(sortItems({ sortType }))
+  }, [sortType])
 
+  useEffect(() => {
+    dispatch(searchItems({ searchText: searchText.trim() }))
+    dispatch(sortItems({ sortType }))
+  }, [searchText])
+
+  const items = useSelector(state => state.cart.filteredItems)
+  const images = [firstImage, secondImage, thirdImage]
   return (
     <Container>
       <LoadingContainer loading={loading}>
         <CustomCarousel items={images} />
+        <Box display='flex' justifyContent='space-evenly' mb={6}>
+          <SearchBar setSearchText={setSearchText} />
+          <SortSelect setSortType={setSortType} />
+        </Box>
         <Grid data-testid='grid' spacing={10} container>
 
-          {items.map((item, index) => {
+          {items && items.map((item, index) => {
             return (
               <Grid item key={index}>
                 <ProductCard item={item} />

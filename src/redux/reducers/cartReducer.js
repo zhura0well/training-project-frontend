@@ -8,11 +8,13 @@ const cartSlice = createSlice({
 
     ],
     addedItems: [],
+    filteredItems: [],
     totalPrice: 0
   },
   reducers: {
     setItems(state, action) {
       state.items = action.payload.items
+      state.filteredItems = action.payload.items
     },
 
     addToCart(state, action) {
@@ -21,12 +23,12 @@ const cartSlice = createSlice({
       const existedItem = state.addedItems.find(item => action.payload._id === item._id)
 
       if (existedItem) {
-        existedItem.quantity += 1
+        existedItem.quantity += action.payload.quantity
       } else {
-        addedItem.quantity = 1
+        addedItem.quantity = action.payload.quantity
         state.addedItems.push(addedItem)
       }
-      state.totalPrice += addedItem.price
+      state.totalPrice += addedItem.price * action.payload.quantity
     },
 
     addQuantity(state, action) {
@@ -50,9 +52,31 @@ const cartSlice = createSlice({
         state.totalPrice -= addedItem.price
       }
     },
+
+    sortItems(state, action) {
+      if (action.payload.sortType === 'lowPrice') {
+        state.filteredItems.sort((a, b) => a.price - b.price)
+      } else if (action.payload.sortType === 'highPrice') {
+        state.filteredItems.sort((a, b) => b.price - a.price)
+      }
+    },
+
+    searchItems(state, action) {
+      state.filteredItems = state.items.filter(item => {
+        return (
+          item.title.toLowerCase().includes(action.payload.searchText.toLowerCase()) ||
+          item.description.toLowerCase().includes(action.payload.searchText.toLowerCase())
+        )
+      })
+    },
+
+    clearCart(state) {
+      state.addedItems = []
+      state.totalPrice = 0
+    }
   }
 })
 
-export const { setItems, addToCart, addQuantity, subQuantity } = cartSlice.actions
+export const { setItems, addToCart, addQuantity, subQuantity, sortItems, searchItems, clearCart } = cartSlice.actions
 
 export default cartSlice.reducer
