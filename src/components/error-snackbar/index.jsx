@@ -37,7 +37,9 @@ const ErrorSnackbar = ({ errorMessage, setIsErrorShown }) => {
       action={action}
       anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
     >
-      <Alert onClose={handleClose}
+      <Alert
+        data-testid='test'
+        onClose={handleClose}
         severity='error'
         variant='filled'>
         {`Something went wrong: ${errorMessage}`}

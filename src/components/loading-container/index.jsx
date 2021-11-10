@@ -2,7 +2,7 @@ import React from 'react'
 import { PropTypes } from 'prop-types'
 import Spinner from '../spinner'
 
-const LoadingContainer = ({ loading, children}) => {
+const LoadingContainer = ({ loading, children }) => {
 
   return (
     <>

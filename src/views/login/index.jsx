@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Avatar, Button, TextField, Link, Container, makeStyles, Typography, Box } from '@material-ui/core'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import PropTypes from 'prop-types'
-import { getData, postData } from '../../requests'
+import { getData, postData } from '../../requests/requests'
 import ErrorSnackbar from '../../components/error-snackbar'
 import { useHistory } from 'react-router'
 import { useDispatch } from 'react-redux'
@@ -95,6 +95,7 @@ const Login = (props) => {
               margin='normal'
               required
               fullWidth
+              inputProps={{ 'data-testid': 'username' }}
               label='Username'
               autoFocus
             />
@@ -106,6 +107,7 @@ const Login = (props) => {
               required
               fullWidth
               label='Password'
+              inputProps={{ 'data-testid': 'password' }}
               type='password'
               autoComplete='current-password'
             />

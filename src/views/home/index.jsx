@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Container, Grid, Box } from '@material-ui/core'
 import ProductCard from '../../components/product-card'
 import { useSelector, useDispatch } from 'react-redux'
-import { getData } from '../../requests'
+import { getData } from '../../requests/requests'
 import { searchItems, setItems, sortItems } from '../../redux/reducers/cartReducer'
 import ErrorSnackbar from '../../components/error-snackbar'
 import LoadingContainer from '../../components/loading-container'
@@ -56,7 +56,7 @@ const Home = () => {
           <SearchBar setSearchText={setSearchText} />
           <SortSelect setSortType={setSortType} />
         </Box>
-        <Grid spacing={10} container>
+        <Grid data-testid='grid' spacing={10} container>
 
           {items && items.map((item, index) => {
             return (

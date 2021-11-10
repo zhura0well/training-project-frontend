@@ -68,10 +68,15 @@ const cartSlice = createSlice({
           item.description.toLowerCase().includes(action.payload.searchText.toLowerCase())
         )
       })
+    },
+
+    clearCart(state) {
+      state.addedItems = []
+      state.totalPrice = 0
     }
   }
 })
 
-export const { setItems, addToCart, addQuantity, subQuantity, sortItems, searchItems } = cartSlice.actions
+export const { setItems, addToCart, addQuantity, subQuantity, sortItems, searchItems, clearCart } = cartSlice.actions
 
 export default cartSlice.reducer

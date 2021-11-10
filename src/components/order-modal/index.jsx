@@ -2,7 +2,7 @@ import { Box, Typography, Modal, IconButton, TextField, Button } from '@material
 import { CloseOutlined } from '@material-ui/icons'
 import { PropTypes } from 'prop-types'
 import React, { useState } from 'react'
-import { postData } from '../../requests'
+import { postData } from '../../requests/requests'
 import ErrorSnackbar from '../error-snackbar'
 import SuccessSnackbar from '../success-snackbar'
 const OrderModal = ({ isModalOpen, setIsModalOpen, orderData, setOrderData, setLoading }) => {
