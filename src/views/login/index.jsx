@@ -2,9 +2,11 @@ import React, { useState } from 'react'
 import { Avatar, Button, TextField, Link, Container, makeStyles, Typography, Box } from '@material-ui/core'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import PropTypes from 'prop-types'
-import { postData } from '../../requests'
+import { getData, postData } from '../../requests'
 import ErrorSnackbar from '../../components/error-snackbar'
 import { useHistory } from 'react-router'
+import { useDispatch } from 'react-redux'
+import { addToCart } from '../../redux/reducers/cartReducer'
 import LoadingContainer from '../../components/loading-container'
 
 const Login = (props) => {
@@ -28,7 +30,6 @@ const Login = (props) => {
       margin: theme.spacing(3, 0, 2),
     },
   }))
-
   const classes = useStyles()
 
   //Logic
@@ -39,6 +40,7 @@ const Login = (props) => {
   const [error, setError] = useState('')
   const [isErrorShown, setIsErrorShown] = useState(false)
 
+  const dispatch = useDispatch()
   const [loading, setLoading] = useState(false)
 
 
@@ -49,18 +51,29 @@ const Login = (props) => {
     postData(url, { username, password })
       .then(response => {
         localStorage.setItem('roles', response.roles)
+        localStorage.setItem('userId', response._id)
         history.push('/')
       })
       .then(() => {
+        const id = localStorage.getItem('userId')
+        getData(`/api/shoppingCart/${id}`)
+          .then(response => {
+            const cartItems = response.items
+            for (let i = 0; i < cartItems.length; i++) {
+              dispatch(addToCart({ _id: cartItems[i]._id, quantity: cartItems[i].quantity }))
+            }
+          })
         setUsername('')
         setPassword('')
-        window.location.reload()
       })
       .catch(e => {
         setError(e.statusText)
         setIsErrorShown(true)
       })
-      .finally(() => setTimeout(() => setLoading(false), 1000))
+      .finally(() => setTimeout(() => {
+        window.location.reload()
+        setLoading(false)
+      }, 1000))
   }
 
   return (

@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux'
 
 const Cart = () => {
 
+
   const items = useSelector(state => state.cart.addedItems)
   const totalPrice = useSelector(state => state.cart.totalPrice)
 
@@ -58,10 +59,8 @@ const Cart = () => {
           </Typography>
         </>
       }
-
     </Container>
   )
 }
 
 export default Cart
-
