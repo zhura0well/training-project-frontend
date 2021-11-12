@@ -130,8 +130,9 @@ OrderModal.propTypes = {
   isModalOpen: PropTypes.bool,
   setIsModalOpen: PropTypes.func,
   orderData: PropTypes.shape({
+    userId: PropTypes.string,
     email: PropTypes.string,
-    phone: PropTypes.number,
+    phone: PropTypes.string,
   }),
   setOrderData: PropTypes.func,
   setLoading: PropTypes.func,

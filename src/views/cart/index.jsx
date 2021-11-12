@@ -8,6 +8,7 @@ import LoadingContainer from '../../components/loading-container'
 const Cart = () => {
 
   const [orderData, setOrderData] = useState({
+    userId: null,
     email: '',
     phone: '',
     cart: {
@@ -25,7 +26,8 @@ const Cart = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const placeOrder = () => {
-    setOrderData({ cart: { items, totalPrice } })
+
+    setOrderData({ cart: { items, totalPrice }, userId: localStorage.getItem('userId') })
     setIsModalOpen(true)
   }
   return (
