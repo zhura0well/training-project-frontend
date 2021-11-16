@@ -13,6 +13,8 @@ import NotFoundPage from '../views/not-found-page'
 import ProductInfo from '../views/product-info'
 import UserInfo from '../views/user-info'
 import AddItem from '../views/add-item'
+import AllOrders from '../views/all-orders'
+import OrderInfo from '../views/order-info'
 
 function Router() {
 
@@ -30,7 +32,9 @@ function Router() {
 
   const moderRouts = [
     { path: '/add-item', component: <AddItem /> },
-    { path: '/add-item/:id', component: <AddItem isEditable={true} /> }
+    { path: '/add-item/:id', component: <AddItem isEditable={true} /> },
+    { path: '/all-orders', component: <AllOrders /> },
+    { path: '/order-info/:id', component: <OrderInfo /> }
   ]
 
   const adminRouts = [

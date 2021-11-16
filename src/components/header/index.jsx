@@ -25,7 +25,8 @@ const Header = ({ roles }) => {
     })
       .then(() => {
         dispatch(clearCart())
-        history.push('/')})
+        history.push('/')
+      })
       .finally(() => window.location.reload())
   }
 
@@ -51,9 +52,15 @@ const Header = ({ roles }) => {
               About us?
             </NavLink>
             {roles.includes(ROLE.MODER) &&
-              <NavLink className='link' activeClassName='link-active' exact to='/add-item'>
-                Add item
-              </NavLink>}
+              <>
+                <NavLink className='link' activeClassName='link-active' exact to='/add-item'>
+                  Add item
+                </NavLink>
+                <NavLink className='link' activeClassName='link-active' exact to='/all-orders'>
+                  All orders
+                </NavLink>
+              </>
+            }
 
             {roles.includes(ROLE.ADMIN) &&
               <NavLink className='link' activeClassName='link-active' exact to='/admin/all-users'>
