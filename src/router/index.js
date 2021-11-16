@@ -15,6 +15,7 @@ import UserInfo from '../views/user-info'
 import AddItem from '../views/add-item'
 import AllOrders from '../views/all-orders'
 import OrderInfo from '../views/order-info'
+import PersonalCabinet from '../views/personal-cabinet'
 
 function Router() {
 
@@ -27,7 +28,7 @@ function Router() {
   ]
 
   const userRouts = [
-    { path: '/user', component: <Home /> },
+    { path: '/personal-cabinet', component: <PersonalCabinet /> },
   ]
 
   const moderRouts = [

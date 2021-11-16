@@ -1,6 +1,6 @@
 import React from 'react'
 import { Box, AppBar, Toolbar, IconButton, Container } from '@material-ui/core'
-import { Menu, ShoppingCart } from '@material-ui/icons'
+import { Menu, Person, ShoppingCart } from '@material-ui/icons'
 import PropTypes from 'prop-types'
 import { NavLink, useHistory } from 'react-router-dom'
 import './styles.scss'
@@ -79,13 +79,22 @@ const Header = ({ roles }) => {
             <NavLink exact to='/cart' className='link' activeClassName='link-active'>
               <IconButton
                 size='medium'
-                edge='start'
+                edge='end'
                 color='inherit'
-                sx={{ mr: 2 }}
               >
                 <ShoppingCart />
               </IconButton>
             </NavLink>
+
+            {roles.includes(ROLE.USER) && <NavLink exact to='/personal-cabinet' className='link' activeClassName='link-active'>
+              <IconButton
+                size='medium'
+                edge='start'
+                color='inherit'
+              >
+                <Person />
+              </IconButton>
+            </NavLink>}
 
           </Toolbar>
         </Container>
