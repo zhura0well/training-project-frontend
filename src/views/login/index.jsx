@@ -8,6 +8,9 @@ import { useHistory } from 'react-router'
 import { useDispatch } from 'react-redux'
 import { addToCart } from '../../redux/reducers/cartReducer'
 import LoadingContainer from '../../components/loading-container'
+import { GoogleLogin } from 'react-google-login'
+import { GOOGLE_CLIENT_ID } from '../../clientConfig'
+
 
 const Login = (props) => {
 
@@ -34,8 +37,12 @@ const Login = (props) => {
 
   //Logic
   const history = useHistory()
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
+  const [userData, setUserData] = useState({
+    username: '',
+    password: '',
+    firstName: '',
+    lastName: ''
+  })
 
   const [error, setError] = useState('')
   const [isErrorShown, setIsErrorShown] = useState(false)
@@ -44,11 +51,11 @@ const Login = (props) => {
   const [loading, setLoading] = useState(false)
 
 
-  const login = async () => {
+  const login = async (usingGoogle, user) => {
     setLoading(true)
-    const url = props.isRegistered ? '/api/login' : '/api/register'
+    const url = props.isRegistered ? usingGoogle ? '/api/googleLogin' : '/api/login' : '/api/register'
 
-    postData(url, { username, password })
+    postData(url, user)
       .then(response => {
         localStorage.setItem('roles', response.roles)
         localStorage.setItem('userId', response._id)
@@ -63,17 +70,35 @@ const Login = (props) => {
               dispatch(addToCart({ _id: cartItems[i]._id, quantity: cartItems[i].quantity }))
             }
           })
-        setUsername('')
-        setPassword('')
+        setUserData({})
+        window.location.reload()
       })
       .catch(e => {
-        setError(e.statusText)
+        setError(usingGoogle ? 'Non-existent username.Sign up first)' : e.statusText)
         setIsErrorShown(true)
       })
       .finally(() => setTimeout(() => {
-        window.location.reload()
+
         setLoading(false)
       }, 1000))
+  }
+
+  const googleSuccess = async (res) => {
+    const response = res?.profileObj
+    if (props.isRegistered) {
+      login(true, { username: response.email })
+    } else {
+      setUserData({
+        username: response.email,
+        firstName: response.givenName,
+        lastName: response.familyName,
+      })
+    }
+  }
+
+
+  const googleFailure = (res) => {
+    console.log(res)
   }
 
   return (
@@ -88,9 +113,33 @@ const Login = (props) => {
             {props.isRegistered ? 'Sign in' : 'Sign up'}
           </Typography>
           <form className={classes.form}>
+            {!props.isRegistered && <>
+              <Box display='flex' justifyContent='space-between'>
+                <TextField
+                  value={userData.firstName}
+                  onChange={(e) => setUserData({ ...userData, firstName: e.target.value })}
+                  variant='outlined'
+                  margin='normal'
+                  required
+                  fullWidth
+                  label='First name'
+                  autoFocus
+                />
+                <TextField
+                  value={userData.lastName}
+                  onChange={(e) => setUserData({ ...userData, lastName: e.target.value })}
+                  variant='outlined'
+                  margin='normal'
+                  required
+                  fullWidth
+                  label='Last name'
+                />
+              </Box>
+            </>}
+
             <TextField
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              value={userData.username}
+              onChange={(e) => setUserData({ ...userData, username: e.target.value })}
               variant='outlined'
               margin='normal'
               required
@@ -100,8 +149,8 @@ const Login = (props) => {
               autoFocus
             />
             <TextField
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={userData.password}
+              onChange={(e) => setUserData({ ...userData, password: e.target.value })}
               variant='outlined'
               margin='normal'
               required
@@ -111,17 +160,36 @@ const Login = (props) => {
               type='password'
               autoComplete='current-password'
             />
+
+
             <Button
               fullWidth
               variant='contained'
               color='primary'
-              onClick={login}
+              onClick={() => login(false, userData)}
               className={classes.submit}
             >
               {props.isRegistered ? 'Sign in' : 'Sign up'}
             </Button>
 
-            <Box align='center'>
+            <GoogleLogin
+              clientId={GOOGLE_CLIENT_ID}
+              render={(renderProps) => (
+                <Button
+                  className={classes.googleButton}
+                  color='primary'
+                  fullWidth
+                  onClick={renderProps.onClick}
+                  variant='contained'>
+                  {props.isRegistered ? 'Sign In using Google' : 'Synchronize with Google'}
+                </Button>
+              )}
+              onSuccess={googleSuccess}
+              onFailure={googleFailure}
+              cookiePolicy='single_host_origin'
+            />
+
+            <Box align='center' mt={2}>
               <Link href='/register' variant='body2'>
                 {props.isRegistered && 'Don`t have an account? Sign Up'}
               </Link>
