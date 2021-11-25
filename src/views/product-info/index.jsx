@@ -44,7 +44,7 @@ const ProductInfo = () => {
   }, [])
 
   const onButtonClick = (_id) => {
-    dispatch(addToCart({ _id: _id }))
+    dispatch(addToCart({ _id: _id, quantity: 1 }))
 
     setSuccessMessage('Added to shopping cart)')
     setIsMessageShown(true)
