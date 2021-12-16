@@ -14,3 +14,5 @@ export const orderStatus = {
   ARRIVED: 'ARRIVED',
   DECLINED: 'DECLINED'
 }
+
+export const GOOGLE_CLIENT_ID="181974458014-nlv46s7sq7nga5dqa3qenvu14vhch6u5.apps.googleusercontent.com"
